@@ -16,6 +16,9 @@ public class Save_TEMP extends Activity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_save__temp);
 		
+		//teste ao github
+		
+		
 		Button btn_yes = (Button)findViewById(R.id.btn_yes);
 		
 		btn_yes.setOnClickListener(new View.OnClickListener() {		
