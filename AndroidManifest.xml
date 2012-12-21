@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.isep.arqam.voiceit"
+    android:versionCode="1"
+    android:versionName="1.0" >
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-sdk
+        android:minSdkVersion="7"
+        android:targetSdkVersion="16" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme" >
+        <activity
+            android:name="com.isep.arqam.voiceit.VoiceIT_MainActivity"
+            android:label="@string/app_name" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.MemoRecord"
+            android:label="@string/title_activity_memo_record" >
+        </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.MemoArchive"
+            android:label="@string/title_activity_memos_archive" >
+        </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.dropbox.DropBoxTest"
+            android:label="@string/title_activity_drop_dox_test" >
+        </activity>
+        <activity
+            android:name="com.dropbox.client2.android.AuthActivity"
+            android:configChanges="orientation|keyboard"
+            android:launchMode="singleTask" >
+            <intent-filter>
+                <!-- Change this to be db- followed by your app key -->
+                <data android:scheme="db-uqsveq6pi6xodrr" />
+
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.Save_TEMP"
+            android:label="@string/title_activity_save__temp" >
+        </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.MemoPlay"
+            android:label="@string/title_activity_memo_play" >
+        </activity>
+    </application>
+
+</manifest>
