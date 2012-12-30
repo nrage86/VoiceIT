@@ -57,6 +57,7 @@ import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
 import com.isep.arqam.voiceit.R;
+import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 
 public class DropBoxTest extends Activity {
@@ -134,6 +135,13 @@ public class DropBoxTest extends Activity {
 
         mDisplay = (LinearLayout)findViewById(R.id.logged_in_display);
 
+        
+        
+        
+        
+        
+        
+        
         // This is the button to upload a file
         mUpload = (Button)findViewById(R.id.upload_button);
         
@@ -149,7 +157,23 @@ public class DropBoxTest extends Activity {
                 upload.execute();           
             }
         });
+        
+        
+        Bundle extras = getIntent().getExtras();
+    	String  mFileName= extras.getString("memoName");
+    	File file1 = new File(mFileName);
+    	UploadFile upload = new UploadFile(DropBoxTest.this, mApi, FILE_DIR, file1);
+        upload.execute(); 
 
+        
+        
+        
+        
+        
+        
+        
+        
+        /*
         // This is the button to download a file
         mDownload = (Button)findViewById(R.id.download_button);
 
@@ -160,7 +184,8 @@ public class DropBoxTest extends Activity {
                 download.execute();
             }
         });
-
+         */
+        
         // Display the proper UI state if logged in or not
         setLoggedIn(mApi.getSession().isLinked());
 
@@ -215,6 +240,7 @@ public class DropBoxTest extends Activity {
                 if (uri != null) {
                     UploadFile upload = new UploadFile(this, mApi, FILE_DIR, file);
                     upload.execute();
+                    
                 }
             } else {
                 Log.w(TAG, "Unknown Activity Result from mediaImport: "

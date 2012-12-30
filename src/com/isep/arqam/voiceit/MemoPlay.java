@@ -24,7 +24,9 @@ public class MemoPlay extends Activity {
 		
 		
 		mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest.3gp";
+		String memoName = getIntent().getStringExtra("memoName");
+        //mFileName += "/audiorecordtest.3gp";
+        mFileName += "/"+memoName;
 		
     	final Button btn_play = (Button)findViewById(R.id.btn_Play);	
 		btn_play.setOnClickListener(new View.OnClickListener() {		

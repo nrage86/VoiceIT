@@ -35,6 +35,7 @@ import android.R.string;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
 import android.util.Log;
@@ -52,6 +53,9 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
+import com.isep.arqam.voiceit.MemoRecord;
+import com.isep.arqam.voiceit.Save_TEMP;
+import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 /**
  * Here we show uploading a file in a background thread, trying to show
@@ -179,6 +183,13 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.dismiss();
         if (result) {
             showToast("File successfully uploaded");
+            
+            /** Inicia a activity VoiceIT_MainActivity a partir desta Assyc Task(UploadFile)*/
+            Intent myIntent  = new Intent(mContext, VoiceIT_MainActivity.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            mContext.startActivity(myIntent);
+           
         } else {
             showToast(mErrorMsg);
         }

@@ -28,15 +28,17 @@
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoRecord"
-            android:label="@string/title_activity_memo_record" >
+            android:label="@string/title_activity_memo_record" 
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoArchive"
-            android:label="@string/title_activity_memos_archive" >
+            android:label="@string/title_activity_memos_archive">
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.dropbox.DropBoxTest"
-            android:label="@string/title_activity_drop_dox_test" >
+            android:label="@string/title_activity_drop_dox_test" 
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
@@ -54,11 +56,12 @@
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.Save_TEMP"
-            android:label="@string/title_activity_save__temp" >
+            android:label="@string/title_activity_save__temp" 
+            android:noHistory="true">
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoPlay"
-            android:label="@string/title_activity_memo_play" >
+            android:label="@string/title_activity_memo_play">
         </activity>
     </application>
 

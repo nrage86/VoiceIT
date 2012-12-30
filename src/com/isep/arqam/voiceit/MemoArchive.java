@@ -14,6 +14,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class MemoArchive extends Activity {
 
@@ -52,7 +53,10 @@ public class MemoArchive extends Activity {
 					long arg3) {
 				// TODO Auto-generated method stub
 				Intent myIntent = new Intent(MemoArchive.this, MemoPlay.class);
-				//myIntent.putExtra("memoName", mFileName);
+				//MemoList.getSelectedItemId()
+				// selected item
+	            String selectedFile = ((TextView) arg1).getText().toString();
+				myIntent.putExtra("memoName", selectedFile);
 				MemoArchive.this.startActivity(myIntent);
 			}
 		});
