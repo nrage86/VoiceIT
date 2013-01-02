@@ -57,24 +57,28 @@ import com.isep.arqam.voiceit.MemoRecord;
 import com.isep.arqam.voiceit.Save_TEMP;
 import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
-/**
- * Here we show uploading a file in a background thread, trying to show
- * typical exception handling and flow of control for an app that uploads a
- * file from Dropbox.
- */
+
+/****************************************************************************************
+ * UploadFile
+ * - Here we show uploading a file in a background thread, trying to show
+ *   typical exception handling and flow of control for an app that uploads a
+ *   file from Dropbox.
+ ***************************************************************************************/
 public class UploadFile extends AsyncTask<Void, Long, Boolean> {
 
+	/** Variaveis globais*/
 	private DropboxAPI<?> mApi;
     private String mPath;
     private File mFile;
-
     private long mFileLen;
     private UploadRequest mRequest;
     private Context mContext;
     private final ProgressDialog mDialog;
-
     private String mErrorMsg ;
 	
+	/************************************************************************************
+	 * UploadFile
+	 ***********************************************************************************/
 	public UploadFile(Context context, DropboxAPI<?> api, String dropboxPath,
             File file) {
 		
@@ -99,6 +103,9 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.show();
 	}
 
+	/************************************************************************************
+	 * doInBackground
+	 ***********************************************************************************/
 	@Override
 	protected Boolean doInBackground(Void... arg0) {
 		// TODO Auto-generated method stub
@@ -172,12 +179,18 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         return false;
 	}
 	
+	/************************************************************************************
+	 * onProgressUpdate
+	 ***********************************************************************************/
     @Override
     protected void onProgressUpdate(Long... progress) {
         int percent = (int)(100.0*(double)progress[0]/mFileLen + 0.5);
         mDialog.setProgress(percent);
     }
 
+	/************************************************************************************
+	 * onPostExecute
+	 ***********************************************************************************/
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
@@ -195,6 +208,9 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         }
     }
 
+	/************************************************************************************
+	 * showToast
+	 ***********************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
         error.show();

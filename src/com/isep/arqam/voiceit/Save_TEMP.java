@@ -1,6 +1,6 @@
 package com.isep.arqam.voiceit;
 
-import com.isep.arqam.voiceit.dropbox.DropBoxTest;
+import com.isep.arqam.voiceit.dropbox.DropboxMain;
 
 import android.os.Bundle;
 import android.app.Activity;
@@ -22,7 +22,7 @@ public class Save_TEMP extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				// TODO Auto-generated method stub
-				Intent myIntent = new Intent(Save_TEMP.this, DropBoxTest.class);
+				Intent myIntent = new Intent(Save_TEMP.this, DropboxMain.class);
 				Save_TEMP.this.startActivity(myIntent);
 			}
 		});

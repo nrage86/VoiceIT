@@ -60,20 +60,26 @@ import com.isep.arqam.voiceit.R;
 import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 
-public class DropBoxTest extends Activity {
-    private static final String TAG = "DropBoxTest";
+/****************************************************************************************
+ * MemoRecord
+ * - Faz a gravação de um novo memo
+ ***************************************************************************************/
+public class DropboxMain extends Activity {
+
+	/** Variaveis globais*/
+    private static final String TAG = "DropboxMain";
 
     ///////////////////////////////////////////////////////////////////////////
     //                      Your app-specific settings.                      //
     ///////////////////////////////////////////////////////////////////////////
-
+    
     // Replace this with your app key and secret assigned by Dropbox.
     // Note that this is a really insecure way to do this, and you shouldn't
     // ship code which contains your key & secret in such an obvious way.
     // Obfuscation is good.
     final static private String APP_KEY = "uqsveq6pi6xodrr";
     final static private String APP_SECRET = "vstidydf4th7bhn";
-
+    
     // If you'd like to change the access type to the full Dropbox instead of
     // an app folder, change this value.
     final static private AccessType ACCESS_TYPE = AccessType.APP_FOLDER;
@@ -101,6 +107,9 @@ public class DropBoxTest extends Activity {
     final static private int NEW_FILE = 1;
     private String mFileName;
 
+	/************************************************************************************
+	 * onCreate
+	 ***********************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -114,7 +123,7 @@ public class DropBoxTest extends Activity {
         mApi = new DropboxAPI<AndroidAuthSession>(session);
         
         // Basic Android widgets
-        setContentView(R.layout.main);
+        setContentView(R.layout.activity_dropbox_main);
 
 
         checkAppKeySetup();
@@ -128,19 +137,12 @@ public class DropBoxTest extends Activity {
                     logOut();
                 } else {
                     // Start the remote authentication
-                    mApi.getSession().startAuthentication(DropBoxTest.this);
+                    mApi.getSession().startAuthentication(DropboxMain.this);
                 }
             }
         });
 
         mDisplay = (LinearLayout)findViewById(R.id.logged_in_display);
-
-        
-        
-        
-        
-        
-        
         
         // This is the button to upload a file
         mUpload = (Button)findViewById(R.id.upload_button);
@@ -153,25 +155,16 @@ public class DropBoxTest extends Activity {
             	
             	//File file1 = new File("/sdcard/audiorecordtest.3gp");
             	File file1 = new File(mFileName);
-            	UploadFile upload = new UploadFile(DropBoxTest.this, mApi, FILE_DIR, file1);
+            	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR, file1);
                 upload.execute();           
             }
         });
         
-        
         Bundle extras = getIntent().getExtras();
     	String  mFileName= extras.getString("memoName");
     	File file1 = new File(mFileName);
-    	UploadFile upload = new UploadFile(DropBoxTest.this, mApi, FILE_DIR, file1);
+    	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR, file1);
         upload.execute(); 
-
-        
-        
-        
-        
-        
-        
-        
         
         /*
         // This is the button to download a file
@@ -190,13 +183,10 @@ public class DropBoxTest extends Activity {
         setLoggedIn(mApi.getSession().isLinked());
 
     }
-
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("mFileName", mFileName);
-        super.onSaveInstanceState(outState);
-    }
-
+    
+	/************************************************************************************
+	 * onResume
+	 ***********************************************************************************/
     @Override
     protected void onResume() {
         super.onResume();
@@ -221,7 +211,55 @@ public class DropBoxTest extends Activity {
         }
     }
 
-    // This is what gets called on finishing a media piece to import
+	/************************************************************************************
+	 * onStart
+	 ***********************************************************************************/
+    @Override
+    public void onStart() {
+        super.onStart();
+        Log.d(TAG, "onStart()" + this);
+    }
+
+	/************************************************************************************
+	 * onPause
+	 ***********************************************************************************/
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.d(TAG, "onPause()" + this);
+    }
+
+	/************************************************************************************
+	 * onStop
+	 ***********************************************************************************/
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.d(TAG, "onStop()" + this);
+    }
+
+	/************************************************************************************
+	 * onDestroy
+	 ***********************************************************************************/
+    @Override
+    public void onDestroy() {
+    	super.onDestroy();
+        Log.d(TAG, "onDestroy()" + this);
+    }
+    
+	/************************************************************************************
+	 * onSaveInstanceState
+	 ***********************************************************************************/
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putString("mFileName", mFileName);
+        super.onSaveInstanceState(outState);
+    }
+    
+	/************************************************************************************
+	 * onActivityResult
+	 * - This is what gets called on finishing a media piece to import
+	 ***********************************************************************************/
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == NEW_FILE) {
@@ -249,6 +287,9 @@ public class DropBoxTest extends Activity {
         }
     }
 
+	/************************************************************************************
+	 * logOut
+	 ***********************************************************************************/
     private void logOut() {
         // Remove credentials from the session
         mApi.getSession().unlink();
@@ -259,9 +300,10 @@ public class DropBoxTest extends Activity {
         setLoggedIn(false);
     }
 
-    /**
-     * Convenience function to change UI state based on being logged in
-     */
+	/************************************************************************************
+	 * setLoggedIn
+	 * - Convenience function to change UI state based on being logged in
+	 ***********************************************************************************/
     private void setLoggedIn(boolean loggedIn) {
     	mLoggedIn = loggedIn;
     	if (loggedIn) {
@@ -273,6 +315,9 @@ public class DropBoxTest extends Activity {
     	}
     }
 
+	/************************************************************************************
+	 * checkAppKeySetup
+	 ***********************************************************************************/
     private void checkAppKeySetup() {
         // Check to make sure that we have a valid app key
         if (APP_KEY.startsWith("CHANGE") ||
@@ -297,18 +342,22 @@ public class DropBoxTest extends Activity {
         }
     }
 
+	/************************************************************************************
+	 * showToast
+	 ***********************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
         error.show();
     }
 
-    /**
-     * Shows keeping the access keys returned from Trusted Authenticator in a local
-     * store, rather than storing user name & password, and re-authenticating each
-     * time (which is not to be done, ever).
+	/************************************************************************************
+	 * getKeys
+	 * - Shows keeping the access keys returned from Trusted Authenticator in a local
+     *   store, rather than storing user name & password, and re-authenticating each
+     *   time (which is not to be done, ever).
      *
-     * @return Array of [access_key, access_secret], or null if none stored
-     */
+     *   @return Array of [access_key, access_secret], or null if none stored
+	 ***********************************************************************************/
     private String[] getKeys() {
         SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
         String key = prefs.getString(ACCESS_KEY_NAME, null);
@@ -322,12 +371,13 @@ public class DropBoxTest extends Activity {
         	return null;
         }
     }
-
-    /**
-     * Shows keeping the access keys returned from Trusted Authenticator in a local
-     * store, rather than storing user name & password, and re-authenticating each
-     * time (which is not to be done, ever).
-     */
+ 
+	/************************************************************************************
+	 * storeKeys
+	 * - Shows keeping the access keys returned from Trusted Authenticator in a local
+     *   store, rather than storing user name & password, and re-authenticating each
+     *   time (which is not to be done, ever).
+	 ***********************************************************************************/
     private void storeKeys(String key, String secret) {
         // Save the access key for later
         SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
@@ -337,6 +387,9 @@ public class DropBoxTest extends Activity {
         edit.commit();
     }
 
+	/************************************************************************************
+	 * clearKeys
+	 ***********************************************************************************/
     private void clearKeys() {
         SharedPreferences prefs = getSharedPreferences(ACCOUNT_PREFS_NAME, 0);
         Editor edit = prefs.edit();
@@ -344,6 +397,9 @@ public class DropBoxTest extends Activity {
         edit.commit();
     }
 
+	/************************************************************************************
+	 * buildSession
+	 ***********************************************************************************/
     private AndroidAuthSession buildSession() {
         AppKeyPair appKeyPair = new AppKeyPair(APP_KEY, APP_SECRET);
         AndroidAuthSession session;

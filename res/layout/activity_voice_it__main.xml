@@ -2,23 +2,25 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".VoiceIT_MainActivity" >
+    tools:context=".VoiceIT_MainActivity">
 
     <Button
         android:id="@+id/startRecord"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_height="200dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="51dp"
-        android:text="Gravar Memo" />
+        android:text="Gravar Memo" 
+        android:layout_marginTop="16dp"
+        style="@style/ButtonTheme"/>
 
     <Button
         android:id="@+id/archive"
         android:layout_width="match_parent"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="45dp"
-        android:text="Arquivo" />
+        android:layout_height="120dp"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/startRecord"
+        android:text="Arquivo" 
+        style="@style/ButtonTheme"/>
 
 </RelativeLayout>

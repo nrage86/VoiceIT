@@ -54,24 +54,23 @@ import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 
-/**
- * Here we show getting metadata for a directory and downloading a file in a
- * background thread, trying to show typical exception handling and flow of
- * control for an app that downloads a file from Dropbox.
- */
 
+/****************************************************************************************
+ * DownloadFile
+ * - Here we show getting metadata for a directory and downloading a file in a
+ *   background thread, trying to show typical exception handling and flow of
+ *   control for an app that downloads a file from Dropbox.
+ ***************************************************************************************/
 public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 
-
+	/** Variaveis globais*/
     private Context mContext;
     private final ProgressDialog mDialog;
     private DropboxAPI<?> mApi;
     private String mPath;
     private ImageView mView;
     private Drawable mDrawable;
-
     private FileOutputStream mFos;
-
     private boolean mCanceled;
     private Long mFileLen;
     private String mErrorMsg;
@@ -80,6 +79,9 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
     // won't be able to use this code for two simultaneous downloads.
     private final static String FILE_NAME = "testeDownload.mp4";
 
+	/************************************************************************************
+	 * DownloadFile
+	 ***********************************************************************************/
     public DownloadFile(Context context, DropboxAPI<?> api,
             String dropboxPath) {
         // We set the context this way so we don't accidentally leak activities
@@ -110,6 +112,9 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.show();
     }
 
+	/************************************************************************************
+	 * doInBackground
+	 ***********************************************************************************/
     @Override
     protected Boolean doInBackground(Void... params) {
         try {
@@ -222,12 +227,18 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         return false;
     }
 
+	/************************************************************************************
+	 * onProgressUpdate
+	 ***********************************************************************************/
     @Override
     protected void onProgressUpdate(Long... progress) {
         int percent = (int)(100.0*(double)progress[0]/mFileLen + 0.5);
         mDialog.setProgress(percent);
     }
 
+	/************************************************************************************
+	 * onPostExecute
+	 ***********************************************************************************/
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
@@ -240,10 +251,11 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         }
     }
 
+	/************************************************************************************
+	 * showToast
+	 ***********************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
         error.show();
     }
-
-
 }
