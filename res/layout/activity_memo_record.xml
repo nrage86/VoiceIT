@@ -10,6 +10,7 @@
         android:layout_height="100dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Terminar" />
+        android:text="Terminar"
+		style="@style/ButtonTheme"/>
 
 </RelativeLayout>

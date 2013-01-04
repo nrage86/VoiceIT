@@ -34,21 +34,14 @@ import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
-import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.DropboxAPI.DropboxFileInfo;
 import com.dropbox.client2.DropboxAPI.Entry;
-import com.dropbox.client2.DropboxAPI.ThumbFormat;
-import com.dropbox.client2.DropboxAPI.ThumbSize;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxIOException;
 import com.dropbox.client2.exception.DropboxParseException;
@@ -56,15 +49,14 @@ import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.isep.arqam.voiceit.MemoArchive;
-import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 
-/****************************************************************************************
+/**************************************************************************************************
  * DownloadFile
  * - Here we show getting metadata for a directory and downloading a file in a
  *   background thread, trying to show typical exception handling and flow of
  *   control for an app that downloads a file from Dropbox.
- ***************************************************************************************/
+ *************************************************************************************************/
 public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 
 	/** Variaveis globais*/
@@ -72,73 +64,41 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
     private final ProgressDialog mDialog;
     private DropboxAPI<?> mApi;
     private String mPath;
-    private ImageView mView;
-    private Drawable mDrawable;
-    private FileOutputStream mFos;
-    private boolean mCanceled;
     private Long mFileLen;
     private String mErrorMsg;
+    
+	private ArrayList<String> filePath = new ArrayList<String>();
+	private ArrayList<String> localMemoList = new ArrayList<String>();   
+	private File sdcard = Environment.getExternalStorageDirectory();
+	private File[] sdcardFiles = sdcard.listFiles();
 
-    // Note that, since we use a single file name here for simplicity, you
-    // won't be able to use this code for two simultaneous downloads.
-    private final static String FILE_NAME = "testeDownload.mp4";
-
-	/************************************************************************************
+	/**********************************************************************************************
 	 * DownloadFile
-	 ***********************************************************************************/
-    public DownloadFile(Context context, DropboxAPI<?> api,
-            String dropboxPath) {
+	 *********************************************************************************************/
+    public DownloadFile(Context context, DropboxAPI<?> api, String dropboxPath) {
         // We set the context this way so we don't accidentally leak activities
         mContext = context.getApplicationContext();
-
+        
         mApi = api;
         mPath = dropboxPath;
-        //mView = view;
 
-        
-        
+        // Dialog box
         mDialog = new ProgressDialog(context);
-        mDialog.setMessage("A sincronizar com o Dropbox");
-        mDialog.setButton("Cancel", new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                mCanceled = true;
-                mErrorMsg = "Canceled";
-
-                // This will cancel the getThumbnail operation by closing
-                // its stream
-                if (mFos != null) {
-                    try {
-                        mFos.close();
-                    } catch (IOException e) {
-                    }
-                }
-            }
-        });
-
+        mDialog.setMessage("A sincronizar com o Dropbox");        
         mDialog.show();
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * doInBackground
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     @Override
     protected Boolean doInBackground(Void... params) {
         
+        ArrayList<String> dropboxMemoList=new ArrayList<String>();
+        String[] splitDropboxMemoName;
+        Boolean exists;
+        
     	try {
-            if (mCanceled) {
-                return false;
-            }
-
-            
-            
-            
-            
-            
-            
-            
-            
-            
-            
             // Get the metadata for a directory
             Entry dirent = mApi.metadata(mPath, 1000, null, true, null);
 
@@ -147,103 +107,39 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
                 mErrorMsg = "File or empty directory";
                 return false;
             }
-         
-            
-            int i=0;
-            
-            ArrayList<Entry> files = new ArrayList<Entry>();
-            ArrayList<String> dropboxFileList=new ArrayList<String>();
 
+            /** Vai buscar todos os ficheiros na pasta do dropbox e guarda-os num array*/
             for (Entry ent: dirent.contents) 
-            {
-                files.add(ent);// Add it to the list of thumbs we can choose from                       
-                //dir = new ArrayList<String>();
-                //dir.add(new String(files.get(i++).path));
-                dropboxFileList.add(new String(ent.fileName()));
+            {                   
+                dropboxMemoList.add(new String(ent.fileName()));
                 mFileLen = ent.bytes;
             }
-            
-            i=0;
            
+            getLocalMemoList();
             
-            
-            
-            /*
-            // Make a list of everything in it that we can get a thumbnail for
-            ArrayList<Entry> thumbs = new ArrayList<Entry>();
-            for (Entry ent: dirent.contents) {
-                // Add it to the list of thumbs we can choose from
-                thumbs.add(ent);
-            }
-
-            if (mCanceled) {
-                return false;
-            }
-
-            if (thumbs.size() == 0) {
-                // No thumbs in that directory
-                mErrorMsg = "No pictures in that directory";
-                return false;
-            }
-
-            // Now pick a random one
-            int index = (int)(Math.random() * thumbs.size());
-            Entry ent = thumbs.get(index);
-            String path = ent.path;
-            mFileLen = ent.bytes;
-            */
-            
-            
-    		ArrayList<String> path = new ArrayList<String>();
-    		ArrayList<String> memosList = new ArrayList<String>();  
-    	     
-    		File sdcard = Environment.getExternalStorageDirectory();
-    		File[] sdcardFiles = sdcard.listFiles();
-         // Lista os memos da pasta /sdcard do tlm numa listview no ecra
-    		for(int n=0; n < sdcardFiles.length; n++)    
-    	     {
-    	          File file = sdcardFiles[n];
-    	          path.add(file.getPath());
-      
-                  String filename=file.getName();
-                  String ext = filename.substring(filename.lastIndexOf('.')+1, filename.length());
-                  if(ext.equals("3gp")||ext.equals("mp4"))
-                  {
-                	  memosList.add(file.getName());
-                  }
-    	     }   
-            
-            
-            
-            
-            for (String dropboxMemoName : dropboxFileList) {
+            /** Verifica se existe algum memo no Dropbox que nao exista localmente no tlm.
+             * 	Se for o caso então faz o download desse memo*/
+            for (String dropboxMemoName : dropboxMemoList) {	
+            	exists=false;
+            	splitDropboxMemoName = dropboxMemoName.split("\\.");
             	
-            	Boolean flag=false;
-            	String[] splitDropboxMemoName = dropboxMemoName.split("\\.");
-            	
-            	for (String localMemoName : memosList) {
-            		
+            	for (String localMemoName : localMemoList) {
             		String[] splitLocalMemoName = localMemoName.split("\\.");
             		
     				if(splitDropboxMemoName[0].equals(splitLocalMemoName[0]))
-    					flag=true;
-					//if(true)
-					
-				
+    					exists=true;
 				}
             	
-            	if(!flag){
-            		// Get file.
-		            FileOutputStream outputStream = null;
+            	if(!exists){
+	                File file = new File(sdcard + "/" + splitDropboxMemoName[0]+".3gp");
+	                FileOutputStream outputStream = null;
+	                
+	                // Get file.
 		            try {
-		                File file = new File("/sdcard/"+splitDropboxMemoName[0]+".3gp");
-		                
 		                outputStream = new FileOutputStream(file);
-		                DropboxFileInfo info = mApi.getFile("/Memos/" + splitDropboxMemoName[0] + ".3gp",
-		                		null, outputStream, null);
+		                mApi.getFile("/Memos/" + splitDropboxMemoName[0] + ".3gp", null,
+		                		outputStream, null);
 
-		                //Log.i("DbExampleLog", "The file's rev is: " + info.getMetadata().rev);
-		                // /path/to/new/file.txt now has stuff in it.
 		            } catch (DropboxException e) {
 		                Log.e("DbExampleLog", "Something went wrong while downloading.");
 		            } catch (FileNotFoundException e) {
@@ -256,23 +152,9 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 		                }
 		            }
 		            
-		            if (mCanceled) {
-		                return false;
-		            }
-		            
 		            return true;    		
             	}
 			}
-            
-
-
-            //mDrawable = Drawable.createFromPath(cachePath);
-            // We must have a legitimate picture
-              
-              
-             
-            
-
         } catch (DropboxUnlinkedException e) {
             // The AuthSession wasn't properly authenticated or user unlinked.
         } catch (DropboxPartialFileException e) {
@@ -319,25 +201,42 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         return true;
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
+	 * getLocalMemoList
+	 *********************************************************************************************/
+    protected void getLocalMemoList() {
+		for(int n=0; n < sdcardFiles.length; n++)    
+	     {
+	          File file = sdcardFiles[n];
+	          filePath.add(file.getPath());
+ 
+             String fileName=file.getName();
+             String ext = fileName.substring(fileName.lastIndexOf('.')+1, fileName.length());
+             if(ext.equals("3gp")||ext.equals("mp4"))
+             {
+            	 localMemoList.add(file.getName());
+             }
+	     }  
+    }
+    
+	/**********************************************************************************************
 	 * onProgressUpdate
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     @Override
     protected void onProgressUpdate(Long... progress) {
         int percent = (int)(100.0*(double)progress[0]/mFileLen + 0.5);
         mDialog.setProgress(percent);
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * onPostExecute
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
         if (result) {
-            // Success msg
-        	showToast("File successfully downloaded");
-        	
+        	// Success msg
+        	showToast("Sincronização concluida");
         	
         	Intent myIntent = new Intent(mContext, MemoArchive.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -351,9 +250,9 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         }
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * showToast
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
         error.show();

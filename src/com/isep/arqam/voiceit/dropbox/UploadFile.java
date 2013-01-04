@@ -28,24 +28,16 @@ package com.isep.arqam.voiceit.dropbox;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 
-import android.R;
-import android.R.string;
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.DialogInterface.OnClickListener;
 import android.os.AsyncTask;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
-import com.dropbox.client2.DropboxAPI.Entry;
 import com.dropbox.client2.DropboxAPI.UploadRequest;
 import com.dropbox.client2.ProgressListener;
-import com.dropbox.client2.android.AndroidAuthSession;
 import com.dropbox.client2.exception.DropboxException;
 import com.dropbox.client2.exception.DropboxFileSizeException;
 import com.dropbox.client2.exception.DropboxIOException;
@@ -53,17 +45,15 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.isep.arqam.voiceit.MemoRecord;
-import com.isep.arqam.voiceit.Save_TEMP;
 import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 
-/****************************************************************************************
+/**************************************************************************************************
  * UploadFile
  * - Here we show uploading a file in a background thread, trying to show
  *   typical exception handling and flow of control for an app that uploads a
  *   file from Dropbox.
- ***************************************************************************************/
+ *************************************************************************************************/
 public class UploadFile extends AsyncTask<Void, Long, Boolean> {
 
 	/** Variaveis globais*/
@@ -76,9 +66,9 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
     private final ProgressDialog mDialog;
     private String mErrorMsg ;
 	
-	/************************************************************************************
+	/**********************************************************************************************
 	 * UploadFile
-	 ***********************************************************************************/
+	 *********************************************************************************************/
 	public UploadFile(Context context, DropboxAPI<?> api, String dropboxPath,
             File file) {
 		
@@ -94,34 +84,27 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.setMessage("Uploading " + file.getName());
         mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mDialog.setProgress(0);
-        mDialog.setButton("Cancel", new OnClickListener() {
-            public void onClick(DialogInterface dialog, int which) {
-                // This will cancel the putFile operation
-                mRequest.abort();
-            }
-        });
         mDialog.show();
 	}
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * doInBackground
-	 ***********************************************************************************/
+	 *********************************************************************************************/
 	@Override
 	protected Boolean doInBackground(Void... arg0) {
-		// TODO Auto-generated method stub
-		
-		
+
 		try {
             // By creating a request, we get a handle to the putFile operation,
             // so we can cancel it later if we want to
             FileInputStream fis = new FileInputStream(mFile);
             String path = mPath + mFile.getName();
+            
             mRequest = mApi.putFileOverwriteRequest(path, fis, mFile.length(),
                     new ProgressListener() {
                 @Override
                 public long progressInterval() {
                     // Update the progress bar every half-second or so
-                    return 500;
+                    return 100;
                 }
 
                 @Override
@@ -179,23 +162,23 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         return false;
 	}
 	
-	/************************************************************************************
+	/**********************************************************************************************
 	 * onProgressUpdate
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     @Override
     protected void onProgressUpdate(Long... progress) {
         int percent = (int)(100.0*(double)progress[0]/mFileLen + 0.5);
         mDialog.setProgress(percent);
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * onPostExecute
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
         if (result) {
-            showToast("File successfully uploaded");
+            showToast("Ficheiro carregado com sucesso");
             
             /** Inicia a activity VoiceIT_MainActivity a partir desta Assyc Task(UploadFile)*/
             Intent myIntent  = new Intent(mContext, VoiceIT_MainActivity.class);
@@ -208,9 +191,9 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         }
     }
 
-	/************************************************************************************
+	/**********************************************************************************************
 	 * showToast
-	 ***********************************************************************************/
+	 *********************************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(mContext, msg, Toast.LENGTH_LONG);
         error.show();

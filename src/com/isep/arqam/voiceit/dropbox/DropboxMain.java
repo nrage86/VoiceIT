@@ -28,22 +28,17 @@ package com.isep.arqam.voiceit.dropbox;
 import java.io.File;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.dropbox.client2.DropboxAPI;
 import com.dropbox.client2.android.AndroidAuthSession;
-import com.dropbox.client2.android.AuthActivity;
 import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
@@ -89,14 +84,8 @@ public class DropboxMain extends Activity {
     private boolean mLoggedIn;
     // Android widgets
     private Button mSubmit;
-    private LinearLayout mDisplay;
-    private Button mUpload;
-    private Button mDownload;
 
     private final String FILE_DIR = "/Memos/";
-
-    final static private int NEW_FILE = 1;
-    private String mFileName;
 
 	/**********************************************************************************************
 	 * onCreate
@@ -109,24 +98,9 @@ public class DropboxMain extends Activity {
         /** We create a new AuthSession so that we can use the Dropbox API.*/
         AndroidAuthSession session = buildSession();
         mApi = new DropboxAPI<AndroidAuthSession>(session);
-   
-        
-        
-        
-        /*
-        if (savedInstanceState != null) {
-            mFileName = savedInstanceState.getString("mFileName");
-        }
-        */
 
-        
-        
-        
-        
-        checkAppKeySetup();
-
+        /** Botao para fazer login ou logout */
         mSubmit = (Button)findViewById(R.id.auth_button);
-
         mSubmit.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 // This logs you out if you're logged in, or vice versa
@@ -138,28 +112,9 @@ public class DropboxMain extends Activity {
                 }
             }
         });
-
-        mDisplay = (LinearLayout)findViewById(R.id.logged_in_display);
-        
-        // This is the button to upload a file
-        mUpload = (Button)findViewById(R.id.upload_button);
-        
-        mUpload.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-            	
-            	Bundle extras = getIntent().getExtras();
-            	String  mFileName= extras.getString("memoName");
-            	
-            	//File file1 = new File("/sdcard/audiorecordtest.3gp");
-            	File file1 = new File(mFileName);
-            	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR, file1);
-                upload.execute();           
-            }
-        });
-        
+              
+        /** Obtem os parametros extra passados para esta activity*/
         Bundle extras = getIntent().getExtras();
-    	
-    	
         /** Faz o download de fixeiros do dropbox*/
     	if(extras.getString("DropboxTask").equals("download")){
     		DownloadFile download = new DownloadFile(DropboxMain.this, mApi, FILE_DIR);
@@ -172,22 +127,9 @@ public class DropboxMain extends Activity {
         	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR, memoFile);
             upload.execute(); 
     	}
-   
-        // This is the button to download a file
-        mDownload = (Button)findViewById(R.id.download_button);
 
-        mDownload.setOnClickListener(new OnClickListener() {
-            public void onClick(View v) {
-                DownloadFile download = new DownloadFile(DropboxMain.this,
-                		mApi, FILE_DIR);
-                download.execute();
-            }
-        });
-         
-        
-        // Display the proper UI state if logged in or not
+        /** Display the proper UI state if logged in or not*/
         setLoggedIn(mApi.getSession().isLinked());
-
     }
     
 	/**********************************************************************************************
@@ -198,9 +140,9 @@ public class DropboxMain extends Activity {
         super.onResume();
         AndroidAuthSession session = mApi.getSession();
 
-        // The next part must be inserted in the onResume() method of the
-        // activity from which session.startAuthentication() was called, so
-        // that Dropbox authentication completes properly.
+        /** The next part must be inserted in the onResume() method of the
+            activity from which session.startAuthentication() was called, so
+            that Dropbox authentication completes properly.*/
         if (session.authenticationSuccessful()) {
             try {
                 // Mandatory call to complete the auth
@@ -252,46 +194,6 @@ public class DropboxMain extends Activity {
     	super.onDestroy();
         Log.d(TAG, "onDestroy()" + this);
     }
-    
-	/**********************************************************************************************
-	 * onSaveInstanceState
-	 *********************************************************************************************/
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putString("mFileName", mFileName);
-        super.onSaveInstanceState(outState);
-    }
-    
-	/**********************************************************************************************
-	 * onActivityResult
-	 * - This is what gets called on finishing a media piece to import
-	 *********************************************************************************************/
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == NEW_FILE) {
-            // return from file upload
-            if (resultCode == Activity.RESULT_OK) {
-                Uri uri = null;
-                if (data != null) {
-                    uri = data.getData();
-                }
-                
-                if (uri == null && mFileName != null) {
-                    uri = Uri.fromFile(new File(mFileName));
-                }
-                File file = new File(mFileName);
-                
-                if (uri != null) {
-                    UploadFile upload = new UploadFile(this, mApi, FILE_DIR, file);
-                    upload.execute();
-                    
-                }
-            } else {
-                Log.w(TAG, "Unknown Activity Result from mediaImport: "
-                        + resultCode);
-            }
-        }
-    }
 
 	/**********************************************************************************************
 	 * logOut
@@ -299,9 +201,10 @@ public class DropboxMain extends Activity {
     private void logOut() {
         // Remove credentials from the session
         mApi.getSession().unlink();
-
+        
         // Clear our stored keys
         clearKeys();
+        
         // Change UI state to display logged out version
         setLoggedIn(false);
     }
@@ -314,42 +217,15 @@ public class DropboxMain extends Activity {
     	mLoggedIn = loggedIn;
     	if (loggedIn) {
     		mSubmit.setText("Unlink from Dropbox");
-            mDisplay.setVisibility(View.VISIBLE);
     	} else {
     		mSubmit.setText("Link with Dropbox");
-            mDisplay.setVisibility(View.GONE);
     	}
     }
 
-	/**********************************************************************************************
-	 * checkAppKeySetup
-	 *********************************************************************************************/
-    private void checkAppKeySetup() {
-        // Check to make sure that we have a valid app key
-        if (APP_KEY.startsWith("CHANGE") ||
-                APP_SECRET.startsWith("CHANGE")) {
-            showToast("You must apply for an app key and secret from developers.dropbox.com, and add them to the DBRoulette ap before trying it.");
-            finish();
-            return;
-        }
-
-        // Check if the app has set up its manifest properly.
-        Intent testIntent = new Intent(Intent.ACTION_VIEW);
-        String scheme = "db-" + APP_KEY;
-        String uri = scheme + "://" + AuthActivity.AUTH_VERSION + "/test";
-        testIntent.setData(Uri.parse(uri));
-        PackageManager pm = getPackageManager();
-        if (0 == pm.queryIntentActivities(testIntent, 0).size()) {
-            showToast("URL scheme in your app's " +
-                    "manifest is not set up correctly. You should have a " +
-                    "com.dropbox.client2.android.AuthActivity with the " +
-                    "scheme: " + scheme);
-            finish();
-        }
-    }
 
 	/**********************************************************************************************
 	 * showToast
+	 * - Mostra uma toast message no ecrã
 	 *********************************************************************************************/
     private void showToast(String msg) {
         Toast error = Toast.makeText(this, msg, Toast.LENGTH_LONG);
@@ -417,7 +293,7 @@ public class DropboxMain extends Activity {
         } else {
             session = new AndroidAuthSession(appKeyPair, ACCESS_TYPE);
         }
-
+        
         return session;
     }
 }

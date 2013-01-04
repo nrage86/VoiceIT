@@ -17,26 +17,23 @@ public final class R {
         public static final int ic_launcher=0x7f020000;
     }
     public static final class id {
-        public static final int MemoList=0x7f080007;
-        public static final int archive=0x7f08000b;
+        public static final int MemoList=0x7f080003;
+        public static final int archive=0x7f080008;
         public static final int auth_button=0x7f080000;
-        public static final int btn_Play=0x7f080005;
-        public static final int btn_no=0x7f080009;
-        public static final int btn_yes=0x7f080008;
-        public static final int download_button=0x7f080003;
-        public static final int image_view=0x7f080002;
-        public static final int logged_in_display=0x7f080001;
-        public static final int menu_settings=0x7f08000c;
-        public static final int startRecord=0x7f08000a;
-        public static final int stopRecord=0x7f080006;
-        public static final int upload_button=0x7f080004;
+        public static final int btn_Play=0x7f080001;
+        public static final int defaultBt=0x7f080006;
+        public static final int menu_settings=0x7f080009;
+        public static final int speakBt=0x7f080004;
+        public static final int startRecord=0x7f080007;
+        public static final int stopRecord=0x7f080002;
+        public static final int wordsLv=0x7f080005;
     }
     public static final class layout {
         public static final int activity_dropbox_main=0x7f030000;
         public static final int activity_memo_play=0x7f030001;
         public static final int activity_memo_record=0x7f030002;
         public static final int activity_memos_archive=0x7f030003;
-        public static final int activity_save__temp=0x7f030004;
+        public static final int activity_speech_recon=0x7f030004;
         public static final int activity_voice_it__main=0x7f030005;
     }
     public static final class menu {
@@ -48,13 +45,17 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
+        public static final int defaultName=0x7f04000b;
         public static final int hello_world=0x7f040001;
+        public static final int listenName=0x7f04000a;
         public static final int menu_settings=0x7f040002;
         public static final int title_activity_drop_dox_test=0x7f040006;
         public static final int title_activity_memo_play=0x7f040007;
         public static final int title_activity_memo_record=0x7f040003;
         public static final int title_activity_memos_archive=0x7f040004;
         public static final int title_activity_save__temp=0x7f040005;
+        public static final int title_activity_speech_recon=0x7f040009;
+        public static final int title_activity_voice_recon=0x7f040008;
     }
     public static final class style {
         /** 
@@ -80,6 +81,9 @@ public final class R {
          */
         public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
+ All customizations that are NOT specific to a particular API-level can go here. 
+<item name="android:background">@color/gray</item>
+<item name="android:textColor">#EDEDED</item>
          */
         public static final int AppTheme=0x7f060001;
         public static final int ButtonTheme=0x7f060002;

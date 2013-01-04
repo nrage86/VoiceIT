@@ -9,6 +9,10 @@
     <string name="title_activity_save__temp">Save_Temp</string>
     <string name="title_activity_drop_dox_test">DropBoxTest</string>
     <string name="title_activity_memo_play">MemoPlay</string>
+    <string name="title_activity_voice_recon">VoiceRecon</string>
+    <string name="title_activity_speech_recon">SpeechRecon</string>
+    <string name="listenName">Ditar nome</string>
+    <string name="defaultName">Nome por defeito</string>
     
     <color name="gray">#A3A3A3</color>
 

@@ -47,25 +47,32 @@
             <intent-filter>
                 <!-- Change this to be db- followed by your app key -->
                 <data android:scheme="db-uqsveq6pi6xodrr" />
-
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
-            android:name="com.isep.arqam.voiceit.Save_TEMP"
-            android:label="@string/title_activity_save__temp" 
-            android:noHistory="true">
-        </activity>
-        <activity
             android:name="com.isep.arqam.voiceit.MemoPlay"
             android:label="@string/title_activity_memo_play">
         </activity>
-        <service  
-            android:enabled="true"
-			android:name="DropboxService">
-        </service>
+        <activity
+            android:name=".VoiceRecon"
+            android:label="@string/title_activity_voice_recon" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".speechrecon.SpeechRecon"
+            android:label="@string/title_activity_speech_recon" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
     </application>
 </manifest>

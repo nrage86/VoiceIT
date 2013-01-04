@@ -1,9 +1,8 @@
 package com.isep.arqam.voiceit;
 
 import java.io.IOException;
-import java.util.Random;
 
-import com.isep.arqam.voiceit.dropbox.DropboxMain;
+import com.isep.arqam.voiceit.speechrecon.SpeechRecon;
 
 import android.media.MediaRecorder;
 import android.os.Bundle;
@@ -46,11 +45,9 @@ public class MemoRecord extends Activity {
 		btn_stopRecrod.setOnClickListener(new View.OnClickListener() {		
 			@Override
 			public void onClick(View arg0) {
-				// TODO Auto-generated method stub
 				stopRecording();
-				Intent myIntent = new Intent(MemoRecord.this, DropboxMain.class);
-				myIntent.putExtra("memoName", mFileName);
-				myIntent.putExtra("DropboxTask", "upload");
+				Intent myIntent = new Intent(MemoRecord.this, SpeechRecon.class);
+				myIntent.putExtra("memoNameDefault", mFileName);
 				MemoRecord.this.startActivity(myIntent);
 			}
 		});
@@ -106,14 +103,14 @@ public class MemoRecord extends Activity {
 	 *********************************************************************************************/
     public void startRecording() {
     	
-    	Random rand = new Random();
-    	int num = rand.nextInt(20);
+    	Long numLong = System.currentTimeMillis()/1000;
+    	String num = numLong.toString();
     	mRecorder = new MediaRecorder();
         mRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mRecorder.setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP);
         mRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB);
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
-        mFileName += "/audiorecordtest"+num+".3gp";
+        mFileName += "/VoiceIT"+num+".3gp";
         mRecorder.setOutputFile(mFileName);
 
         
