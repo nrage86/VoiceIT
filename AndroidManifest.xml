@@ -63,6 +63,9 @@
             android:name="com.isep.arqam.voiceit.MemoPlay"
             android:label="@string/title_activity_memo_play">
         </activity>
+        <service  
+            android:enabled="true"
+			android:name="DropboxService">
+        </service>
     </application>
-
 </manifest>

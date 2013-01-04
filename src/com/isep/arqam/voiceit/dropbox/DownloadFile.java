@@ -35,9 +35,11 @@ import java.util.ArrayList;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.DialogInterface.OnClickListener;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.util.Log;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -53,6 +55,8 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
+import com.isep.arqam.voiceit.MemoArchive;
+import com.isep.arqam.voiceit.VoiceIT_MainActivity;
 
 
 /****************************************************************************************
@@ -91,8 +95,10 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         mPath = dropboxPath;
         //mView = view;
 
+        
+        
         mDialog = new ProgressDialog(context);
-        mDialog.setMessage("Downloading Image");
+        mDialog.setMessage("A sincronizar com o Dropbox");
         mDialog.setButton("Cancel", new OnClickListener() {
             public void onClick(DialogInterface dialog, int which) {
                 mCanceled = true;
@@ -117,11 +123,22 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 	 ***********************************************************************************/
     @Override
     protected Boolean doInBackground(Void... params) {
-        try {
+        
+    	try {
             if (mCanceled) {
                 return false;
             }
 
+            
+            
+            
+            
+            
+            
+            
+            
+            
+            
             // Get the metadata for a directory
             Entry dirent = mApi.metadata(mPath, 1000, null, true, null);
 
@@ -130,7 +147,28 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
                 mErrorMsg = "File or empty directory";
                 return false;
             }
+         
+            
+            int i=0;
+            
+            ArrayList<Entry> files = new ArrayList<Entry>();
+            ArrayList<String> dropboxFileList=new ArrayList<String>();
 
+            for (Entry ent: dirent.contents) 
+            {
+                files.add(ent);// Add it to the list of thumbs we can choose from                       
+                //dir = new ArrayList<String>();
+                //dir.add(new String(files.get(i++).path));
+                dropboxFileList.add(new String(ent.fileName()));
+                mFileLen = ent.bytes;
+            }
+            
+            i=0;
+           
+            
+            
+            
+            /*
             // Make a list of everything in it that we can get a thumbnail for
             ArrayList<Entry> thumbs = new ArrayList<Entry>();
             for (Entry ent: dirent.contents) {
@@ -153,34 +191,87 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
             Entry ent = thumbs.get(index);
             String path = ent.path;
             mFileLen = ent.bytes;
+            */
             
-            // Get file.
-            FileOutputStream outputStream = null;
-            try {
-                File file = new File("/sdcard/testeDownload.mp4");
-                outputStream = new FileOutputStream(file);
-                DropboxFileInfo info = mApi.getFile("/Memos/teste.mp4", null, outputStream, null);
-                //Log.i("DbExampleLog", "The file's rev is: " + info.getMetadata().rev);
-                // /path/to/new/file.txt now has stuff in it.
-            } catch (DropboxException e) {
-                Log.e("DbExampleLog", "Something went wrong while downloading.");
-            } catch (FileNotFoundException e) {
-                Log.e("DbExampleLog", "File not found.");
-            } finally {
-                if (outputStream != null) {
-                    try {
-                        outputStream.close();
-                    } catch (IOException e) {}
-                }
-            }
             
-            if (mCanceled) {
-                return false;
-            }
+    		ArrayList<String> path = new ArrayList<String>();
+    		ArrayList<String> memosList = new ArrayList<String>();  
+    	     
+    		File sdcard = Environment.getExternalStorageDirectory();
+    		File[] sdcardFiles = sdcard.listFiles();
+         // Lista os memos da pasta /sdcard do tlm numa listview no ecra
+    		for(int n=0; n < sdcardFiles.length; n++)    
+    	     {
+    	          File file = sdcardFiles[n];
+    	          path.add(file.getPath());
+      
+                  String filename=file.getName();
+                  String ext = filename.substring(filename.lastIndexOf('.')+1, filename.length());
+                  if(ext.equals("3gp")||ext.equals("mp4"))
+                  {
+                	  memosList.add(file.getName());
+                  }
+    	     }   
+            
+            
+            
+            
+            for (String dropboxMemoName : dropboxFileList) {
+            	
+            	Boolean flag=false;
+            	String[] splitDropboxMemoName = dropboxMemoName.split("\\.");
+            	
+            	for (String localMemoName : memosList) {
+            		
+            		String[] splitLocalMemoName = localMemoName.split("\\.");
+            		
+    				if(splitDropboxMemoName[0].equals(splitLocalMemoName[0]))
+    					flag=true;
+					//if(true)
+					
+				
+				}
+            	
+            	if(!flag){
+            		// Get file.
+		            FileOutputStream outputStream = null;
+		            try {
+		                File file = new File("/sdcard/"+splitDropboxMemoName[0]+".3gp");
+		                
+		                outputStream = new FileOutputStream(file);
+		                DropboxFileInfo info = mApi.getFile("/Memos/" + splitDropboxMemoName[0] + ".3gp",
+		                		null, outputStream, null);
+
+		                //Log.i("DbExampleLog", "The file's rev is: " + info.getMetadata().rev);
+		                // /path/to/new/file.txt now has stuff in it.
+		            } catch (DropboxException e) {
+		                Log.e("DbExampleLog", "Something went wrong while downloading.");
+		            } catch (FileNotFoundException e) {
+		                Log.e("DbExampleLog", "File not found.");
+		            } finally {
+		                if (outputStream != null) {
+		                    try {
+		                        outputStream.close();
+		                    } catch (IOException e) {}
+		                }
+		            }
+		            
+		            if (mCanceled) {
+		                return false;
+		            }
+		            
+		            return true;    		
+            	}
+			}
+            
+
 
             //mDrawable = Drawable.createFromPath(cachePath);
             // We must have a legitimate picture
-            return true;
+              
+              
+             
+            
 
         } catch (DropboxUnlinkedException e) {
             // The AuthSession wasn't properly authenticated or user unlinked.
@@ -224,7 +315,8 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
             // Unknown error
             mErrorMsg = "Unknown error.  Try again.";
         }
-        return false;
+    	
+        return true;
     }
 
 	/************************************************************************************
@@ -245,6 +337,14 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         if (result) {
             // Success msg
         	showToast("File successfully downloaded");
+        	
+        	
+        	Intent myIntent = new Intent(mContext, MemoArchive.class);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+        	mContext.startActivity(myIntent);
+
+            
         } else {
             // Couldn't download it, so show an error
             showToast(mErrorMsg);

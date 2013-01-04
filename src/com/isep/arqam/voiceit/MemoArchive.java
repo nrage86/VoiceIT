@@ -3,12 +3,9 @@ package com.isep.arqam.voiceit;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.isep.arqam.voiceit.dropbox.DropboxMain;
-
 import android.os.Bundle;
 import android.os.Environment;
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
@@ -40,8 +37,44 @@ public class MemoArchive extends Activity {
 	     
 		File sdcard = Environment.getExternalStorageDirectory();
 		File[] files = sdcard.listFiles();
+		
+		
 
-		// Lista os memos da pasta /sdcard do tlm numa listview no ecra
+/*		
+		 Intent myIntent = new Intent(getApplicationContext(), DropboxService.class);
+		 myIntent.putExtra("memoName", "/audiorecordtest0.3gp");
+		 startService(myIntent);
+*/		
+/*
+		//AndroidAuthSession session = buildSession();
+		mApi = new DropboxAPI<AndroidAuthSession>(session);
+		
+		final String FILE_DIR = "/Memos/";
+		
+        // Get the metadata for a directory
+        Entry dirent = mApi.metadata(FILE_DIR, 1000, null, true, null);
+        
+        ArrayList<Entry> filesDropbox = new ArrayList<Entry>();
+        ArrayList<String> dir=new ArrayList<String>();
+
+        for (Entry ent: dirent.contents) 
+        {
+            filesDropbox.add(ent);// Add it to the list of thumbs we can choose from                       
+            //dir = new ArrayList<String>();
+            //dir.add(new String(files.get(i++).path));
+            dir.add(new String(ent.fileName()));
+        }
+*/
+		
+		
+		
+		
+		
+		
+		
+		
+
+		// Lista os memos no directorio /sdcard do tlm numa listview no ecra
 		for(int i=0; i < files.length; i++)    
 	     {
 	          File file = files[i];
