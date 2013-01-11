@@ -49,6 +49,7 @@ import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
 import com.isep.arqam.voiceit.MemoArchive;
+import com.isep.arqam.voiceit.Voiceit_main;
 
 
 /**************************************************************************************************
@@ -68,7 +69,8 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
     private String mErrorMsg;
     
 	private ArrayList<String> filePath = new ArrayList<String>();
-	private ArrayList<String> localMemoList = new ArrayList<String>();   
+	private ArrayList<String> localMemoList = new ArrayList<String>(); 
+    private ArrayList<String> memosToUpload=new ArrayList<String>();
 	private File sdcard = Environment.getExternalStorageDirectory();
 	private File[] sdcardFiles = sdcard.listFiles();
 
@@ -96,7 +98,8 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         
         ArrayList<String> dropboxMemoList=new ArrayList<String>();
         String[] splitDropboxMemoName;
-        Boolean exists;
+        Boolean existsInLocal;
+        Boolean existsInDropbox;
         
     	try {
             // Get the metadata for a directory
@@ -118,19 +121,19 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
             getLocalMemoList();
             
             /** Verifica se existe algum memo no Dropbox que nao exista localmente no tlm.
-             * 	Se for o caso então faz o download desse memo*/
+             * 	Se for o caso entï¿½o faz o download desse memo*/
             for (String dropboxMemoName : dropboxMemoList) {	
-            	exists=false;
+            	existsInLocal=false;
             	splitDropboxMemoName = dropboxMemoName.split("\\.");
             	
             	for (String localMemoName : localMemoList) {
             		String[] splitLocalMemoName = localMemoName.split("\\.");
             		
     				if(splitDropboxMemoName[0].equals(splitLocalMemoName[0]))
-    					exists=true;
+    					existsInLocal=true;
 				}
             	
-            	if(!exists){
+            	if(!existsInLocal){
 	                File file = new File(sdcard + "/" + splitDropboxMemoName[0]+".3gp");
 	                FileOutputStream outputStream = null;
 	                
@@ -155,8 +158,30 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 		            return true;    		
             	}
 			}
+            
+            /** Verifica se existe algum memo no tlm que nao exista no Dropbox.
+             * 	Se for o caso entï¿½o guarda esse memo num array para fazer upload*/	
+        	for (String localMemoName : localMemoList) {
+        		existsInDropbox=false;
+        		String[] splitLocalMemoName = localMemoName.split("\\.");
+        		
+                for (String dropboxMemoName : dropboxMemoList) {	
+                	splitDropboxMemoName = dropboxMemoName.split("\\.");
+	        		
+					if(splitDropboxMemoName[0].equals(splitLocalMemoName[0]))
+						existsInDropbox=true;
+                }
+                if(!existsInDropbox){
+                	
+					String localMemoPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+					localMemoPath += "/"+ localMemoName;
+                	memosToUpload.add(localMemoPath);
+                }
+			}
+            
         } catch (DropboxUnlinkedException e) {
             // The AuthSession wasn't properly authenticated or user unlinked.
+        	mErrorMsg = "AuthSession failed.";
         } catch (DropboxPartialFileException e) {
             // We canceled the operation
             mErrorMsg = "Download canceled";
@@ -236,14 +261,40 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.dismiss();
         if (result) {
         	// Success msg
-        	showToast("Sincronização concluida");
+        	showToast("Sincronizaï¿½ï¿½o concluida");
+        	Intent myIntent;
         	
+        	
+        	
+        	
+        	
+        	/*
         	Intent myIntent = new Intent(mContext, MemoArchive.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
         	mContext.startActivity(myIntent);
-
-            
+			*/
+        	
+        	if(memosToUpload.size()>0){
+	        	myIntent = new Intent(mContext, DropboxMain.class);
+	            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+	        	myIntent.putExtra("memosToUpload", memosToUpload); //envia o caminho do ficheiro para a activity DropboxTest
+				myIntent.putExtra("DropboxTask", "multiUpload");
+				mContext.startActivity(myIntent);
+        	}
+        	else{
+            	myIntent = new Intent(mContext, MemoArchive.class);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
+            	mContext.startActivity(myIntent);
+        	}	
+        	
+        	
+        	
+        	
+        	
+        	
         } else {
             // Couldn't download it, so show an error
             showToast(mErrorMsg);

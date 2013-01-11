@@ -28,6 +28,7 @@ package com.isep.arqam.voiceit.dropbox;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -45,7 +46,8 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.isep.arqam.voiceit.VoiceIT_MainActivity;
+import com.isep.arqam.voiceit.MemoArchive;
+import com.isep.arqam.voiceit.Voiceit_main;
 
 
 /**************************************************************************************************
@@ -63,21 +65,42 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
     private long mFileLen;
     private UploadRequest mRequest;
     private Context mContext;
+    private Context mContext2;
     private final ProgressDialog mDialog;
     private String mErrorMsg ;
+    //private Boolean flag;
+    private ArrayList<String> memosToUploadList=null;
+    private int index;
+    
 	
 	/**********************************************************************************************
 	 * UploadFile
 	 *********************************************************************************************/
 	public UploadFile(Context context, DropboxAPI<?> api, String dropboxPath,
-            File file) {
+            File file,ArrayList<String> memosToUpload,int memoIndex) {
 		
-		mContext = context.getApplicationContext();
+		
+        
+        
+		index=memoIndex;
+		
+		//if(index==0){
+			
+		
+			mContext = context.getApplicationContext();
+			mContext2 = context;
+	
+			if(memosToUpload!=null)
+				file = new File(memosToUpload.get(0));
+			mFileLen = file.length();
+	        mApi = api;
+	        mPath = dropboxPath;
+	        mFile = file;
+	        //flag = ultimo;
+	        memosToUploadList=memosToUpload;
+	        
 
-        mFileLen = file.length();
-        mApi = api;
-        mPath = dropboxPath;
-        mFile = file;
+		//}
 
         mDialog = new ProgressDialog(context);
         mDialog.setMax(100);
@@ -85,6 +108,8 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         mDialog.setProgressStyle(ProgressDialog.STYLE_HORIZONTAL);
         mDialog.setProgress(0);
         mDialog.show();
+		
+        
 	}
 
 	/**********************************************************************************************
@@ -94,6 +119,14 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
 	protected Boolean doInBackground(Void... arg0) {
 
 		try {
+			
+			if(memosToUploadList!=null && index<memosToUploadList.size()){
+				mFile= new File(memosToUploadList.get(index));
+				mFileLen = mFile.length();
+				index++;
+			}
+			//for (String memoName : memosToUploadList) {
+			
             // By creating a request, we get a handle to the putFile operation,
             // so we can cancel it later if we want to
             FileInputStream fis = new FileInputStream(mFile);
@@ -117,6 +150,8 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
                 mRequest.upload();
                 return true;
             }
+            
+            
 
         } catch (DropboxUnlinkedException e) {
             // This session wasn't authenticated properly or user unlinked
@@ -177,11 +212,19 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
     @Override
     protected void onPostExecute(Boolean result) {
         mDialog.dismiss();
-        if (result) {
+        //if (result && flag) {
+        
+        if(memosToUploadList!=null && index<memosToUploadList.size()){
+        	new UploadFile(mContext2,mApi,mPath,mFile,memosToUploadList,index).execute();
+        }
+        else
+        	index=-1;
+        
+        if (result && index==-1) {
             showToast("Ficheiro carregado com sucesso");
             
             /** Inicia a activity VoiceIT_MainActivity a partir desta Assyc Task(UploadFile)*/
-            Intent myIntent  = new Intent(mContext, VoiceIT_MainActivity.class);
+            Intent myIntent  = new Intent(mContext, Voiceit_main.class);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
             mContext.startActivity(myIntent);
@@ -189,6 +232,7 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         } else {
             showToast(mErrorMsg);
         }
+        
     }
 
 	/**********************************************************************************************

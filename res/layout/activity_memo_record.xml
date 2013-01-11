@@ -6,11 +6,13 @@
 
     <Button
         android:id="@+id/stopRecord"
-        android:layout_width="match_parent"
-        android:layout_height="100dp"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Terminar"
-		style="@style/ButtonTheme"/>
+		style="@style/ButtonTheme"
+		android:background="@drawable/recbutton"
+        android:text="Stop"
+        android:textColor="@color/white" />
 
 </RelativeLayout>

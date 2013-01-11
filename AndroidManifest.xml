@@ -7,18 +7,21 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <uses-sdk
         android:minSdkVersion="10"
         android:targetSdkVersion="16" />
 
-    <application 
+    <application
         android:allowBackup="true"
+        android:background="@color/bg"
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
+        android:screenOrientation="portrait"
         android:theme="@style/AppTheme" >
         <activity
-            android:name="com.isep.arqam.voiceit.VoiceIT_MainActivity"
+            android:name="com.isep.arqam.voiceit.Voiceit_main"
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -28,36 +31,39 @@
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoRecord"
-            android:label="@string/title_activity_memo_record" 
-            android:noHistory="true">
+            android:label="@string/title_activity_memo_record"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoArchive"
-            android:label="@string/title_activity_memos_archive">
+            android:label="@string/title_activity_memos_archive" >
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.dropbox.DropboxMain"
-            android:label="@string/title_activity_drop_dox_test" 
-            android:noHistory="true">
+            android:label="@string/title_activity_drop_dox_test"
+            android:noHistory="true" >
         </activity>
         <activity
             android:name="com.dropbox.client2.android.AuthActivity"
             android:configChanges="orientation|keyboard"
             android:launchMode="singleTask" >
             <intent-filter>
+
                 <!-- Change this to be db- followed by your app key -->
                 <data android:scheme="db-uqsveq6pi6xodrr" />
+
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.BROWSABLE" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name="com.isep.arqam.voiceit.MemoPlay"
-            android:label="@string/title_activity_memo_play">
+            android:label="@string/title_activity_memo_play" >
         </activity>
         <activity
-            android:name=".VoiceRecon"
+            android:name="com.isep.arqam.voiceit.VoiceRecon"
             android:label="@string/title_activity_voice_recon" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -66,7 +72,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".speechrecon.SpeechRecon"
+            android:name="com.isep.arqam.voiceit.speechrecon.SpeechRecon"
             android:label="@string/title_activity_speech_recon" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -74,5 +80,27 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name="com.isep.arqam.voiceit.Voiceit_settings"
+            android:label="@string/title_activity_voice_it__settings" >
+        </activity>
+        <activity
+            android:name=".Settings"
+            android:label="@string/title_activity_settings" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity 
+            android:name="com.isep.arqam.voiceit.Frag_startScreen" 
+            android:theme="@android:style/Theme.NoTitleBar" 
+            />
+        <activity 
+            android:name="com.isep.arqam.voiceit.Frag_memoArchive" 
+            android:theme="@android:style/Theme.NoTitleBar" 
+            />
     </application>
+
 </manifest>

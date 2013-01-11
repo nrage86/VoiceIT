@@ -3,14 +3,52 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".MemoPlay" >
-
+
     <Button
-        android:id="@+id/btn_Play"
-        android:layout_width="200dp"
-        android:layout_height="100dp"
+        android:id="@+id/btnPlay"
+        style="@style/ButtonTheme"
+        android:layout_width="120dp"
+        android:layout_height="120dp"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:text="Play" 
-        style="@style/ButtonTheme"/>
+        android:background="@drawable/recbutton"
+        android:text="@string/play_str"
+        android:textColor="@color/white"
+        android:textSize="28sp" />
+        <!-- Total Duration Label -->
+
+    <SeekBar
+        android:id="@+id/seekbar"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="false"
+        android:max="100"
+        android:paddingBottom="10dip"
+        android:paddingLeft="30dip"
+        android:paddingRight="30dip" />
+
+    <TextView
+        android:id="@+id/songCurrentDurationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="20dp"
+        android:layout_toLeftOf="@+id/btnPlay"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:id="@+id/songTotalDurationLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/songCurrentDurationLabel"
+        android:layout_alignBottom="@+id/songCurrentDurationLabel"
+        android:layout_marginLeft="20dp"
+        android:layout_toRightOf="@+id/btnPlay"
+        android:layout_weight="1"
+        android:textColor="#000000"
+        android:textStyle="bold" />
 
 </RelativeLayout>

@@ -2,22 +2,22 @@ package com.isep.arqam.voiceit;
 
 import java.io.IOException;
 
-import com.isep.arqam.voiceit.speechrecon.SpeechRecon;
-
+import android.app.Activity;
+import android.content.Intent;
 import android.media.MediaRecorder;
 import android.os.Bundle;
 import android.os.Environment;
-import android.app.Activity;
-import android.content.Intent;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
+import com.isep.arqam.voiceit.speechrecon.SpeechRecon;
+
 
 /**************************************************************************************************
  * MemoRecord
- * - Faz a gravaÁ„o de um novo memo
+ * - Faz a gravaÔøΩÔøΩo de um novo memo
  *************************************************************************************************/
 public class MemoRecord extends Activity {
 
@@ -29,7 +29,7 @@ public class MemoRecord extends Activity {
 	/**********************************************************************************************
 	 * onCreate
 	 *********************************************************************************************/
-	@Override
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_memo_record);
@@ -38,7 +38,7 @@ public class MemoRecord extends Activity {
 		startRecording();
 
 		/**
-		 * Termina a gravaÁ„o e inicia activity Save_Temp. Esta activity È temporaria e
+		 * Termina a grava√Å‚Äûo e inicia activity Save_Temp. Esta activity √à temporaria e
 		 * deve ser substituida por uma dialogbox nesta activity (RecordMemo) com os
 		 * mesmos botoes sim e nao;
 		 */
@@ -49,6 +49,7 @@ public class MemoRecord extends Activity {
 				Intent myIntent = new Intent(MemoRecord.this, SpeechRecon.class);
 				myIntent.putExtra("memoNameDefault", mFileName);
 				MemoRecord.this.startActivity(myIntent);
+				finish();
 			}
 		});
 	}

@@ -11,9 +11,16 @@
     <string name="title_activity_memo_play">MemoPlay</string>
     <string name="title_activity_voice_recon">VoiceRecon</string>
     <string name="title_activity_speech_recon">SpeechRecon</string>
-    <string name="listenName">Ditar nome</string>
-    <string name="defaultName">Nome por defeito</string>
-    
-    <color name="gray">#A3A3A3</color>
+    <string name="listenName">Dictate pretended name</string>
+    <string name="defaultName">Default name</string>
+    <string name="play_context">Play</string>
+    <string name="delete_context">Delete</string>
+    <string name="play_str">Play</string>
+    <string name="pause_str">Pause</string>
+
+    <color name="white">#fff</color>
+    <color name="bg">#F2F2EA</color>
+
+    <string name="title_activity_settings">Settings</string>
 
 </resources>
