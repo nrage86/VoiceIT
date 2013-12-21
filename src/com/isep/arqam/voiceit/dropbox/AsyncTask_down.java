@@ -48,18 +48,16 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.isep.arqam.voiceit.MemoArchive;
-import com.isep.arqam.voiceit.Voiceit_main;
+import com.isep.arqam.voiceit.Act_main;
 
 
 /**************************************************************************************************
- * DownloadFile
+ * AsyncTask_down
  * - Here we show getting metadata for a directory and downloading a file in a
  *   background thread, trying to show typical exception handling and flow of
  *   control for an app that downloads a file from Dropbox.
  *************************************************************************************************/
-public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
-
+public class AsyncTask_down extends AsyncTask<Void, Long, Boolean> {
 	/** Variaveis globais*/
     private Context mContext;
     private final ProgressDialog mDialog;
@@ -77,7 +75,7 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 	/**********************************************************************************************
 	 * DownloadFile
 	 *********************************************************************************************/
-    public DownloadFile(Context context, DropboxAPI<?> api, String dropboxPath) {
+    public AsyncTask_down(Context context, DropboxAPI<?> api, String dropboxPath) {
         // We set the context this way so we don't accidentally leak activities
         mContext = context.getApplicationContext();
         
@@ -154,7 +152,6 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 		                    } catch (IOException e) {}
 		                }
 		            }
-		            
 		            return true;    		
             	}
 			}
@@ -276,7 +273,7 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 			*/
         	
         	if(memosToUpload.size()>0){
-	        	myIntent = new Intent(mContext, DropboxMain.class);
+	        	myIntent = new Intent(mContext, Act_dropbox.class);
 	            myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	            myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
 	        	myIntent.putExtra("memosToUpload", memosToUpload); //envia o caminho do ficheiro para a activity DropboxTest
@@ -284,7 +281,8 @@ public class DownloadFile extends AsyncTask<Void, Long, Boolean> {
 				mContext.startActivity(myIntent);
         	}
         	else{
-            	myIntent = new Intent(mContext, MemoArchive.class);
+            	myIntent = new Intent(mContext, Act_main.class);
+            	myIntent.putExtra("currentFrag", "1");
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
             	mContext.startActivity(myIntent);

@@ -1,7 +1,6 @@
 package com.isep.arqam.voiceit;
 
 import java.io.IOException;
-import java.util.Timer;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
@@ -20,11 +19,10 @@ import android.widget.TextView;
 
 
 /**************************************************************************************************
- * MemoPlay
- * - Faz a reprodu��o do memo selecionado previamente
+ * Act_memoPlay
+ * - Faz a reproducao do memo selecionado previamente
  *************************************************************************************************/
-public class MemoPlay extends Activity implements OnCompletionListener {
-	/** Variaveis globais*/
+public class Act_memoPlay extends Activity implements OnCompletionListener {
 	private static final String TAG = "MemoPlay";
 	private static String mFileName = null;
 	private static String mLength = null;
@@ -45,17 +43,15 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_memo_play);
+		setContentView(R.layout.activity_act_memo_play);
 		
 		mFileName = getIntent().getStringExtra("memoName");
-		mLength = getIntent().getStringExtra("length");
-		
+		mLength = getIntent().getStringExtra("length");	
 		mPlayer = new MediaPlayer();
+		
 		try {
 			mPlayer.setDataSource(mFileName);
 			mPlayer.prepare();
-			//mPlayer.start();
-			//buttonClick();
 		} catch (IllegalArgumentException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -71,10 +67,8 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 		}
 		
 		mPlayer.setOnCompletionListener(this);
-		
 		songCurrentDurationLabel = (TextView) findViewById(R.id.songCurrentDurationLabel);
-		songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);
-		
+		songTotalDurationLabel = (TextView) findViewById(R.id.songTotalDurationLabel);	
 		minutesT = (int) TimeUnit.MILLISECONDS.toMinutes(Integer.parseInt(mLength));
 		secondsT = (int) TimeUnit.MILLISECONDS.toSeconds(Integer.parseInt(mLength));
 		
@@ -93,9 +87,6 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 		}
 		
 		songCurrentDurationLabel.setText("00:00");
-		
-        
-		
 		seekbar = (SeekBar) findViewById(R.id.seekbar);
 		seekbar.setMax(Integer.parseInt(mLength));		
 		seekbar.setOnTouchListener(new OnTouchListener() {
@@ -105,8 +96,7 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 				return false;
 			}
 		});		
-		
-        
+
 		btnPlay = (Button)findViewById(R.id.btnPlay);	
 		btnPlay.setOnClickListener(new View.OnClickListener() {		
 			@Override
@@ -174,8 +164,10 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 		return true;
 	}
 	
-	
-	//Método recursivo que faz com que a seekbar acompanhe a reprodução do memo
+	/**********************************************************************************************
+	 * startPlayProgressUpdater
+	 * - Método recursivo que faz com que a seekbar acompanhe a reprodução do memo
+	 *********************************************************************************************/
 	public void startPlayProgressUpdater() {
     	seekbar.setProgress(mPlayer.getCurrentPosition());
 		if (mPlayer.isPlaying()) {
@@ -225,7 +217,10 @@ public class MemoPlay extends Activity implements OnCompletionListener {
     	}
     }
 	
-	// This is event handler thumb moving event
+	/**********************************************************************************************
+	 * seekChange
+	 * - This is event handler thumb moving event
+	 *********************************************************************************************/
     private void seekChange(View v){
     	if(mPlayer.isPlaying()){
 	    	SeekBar sb = (SeekBar)v;
@@ -233,6 +228,9 @@ public class MemoPlay extends Activity implements OnCompletionListener {
 		}
     }
     
+	/**********************************************************************************************
+	 * buttonClick
+	 *********************************************************************************************/
     private void buttonClick(){
         if (btnPlay.getText() == getString(R.string.play_str)) {
             btnPlay.setText(getString(R.string.pause_str));
@@ -248,6 +246,9 @@ public class MemoPlay extends Activity implements OnCompletionListener {
         }
     }
 
+	/**********************************************************************************************
+	 * onCompletion
+	 *********************************************************************************************/
 	@Override
 	public void onCompletion(MediaPlayer mp) {
 		btnPlay.setText(getString(R.string.pause_str));

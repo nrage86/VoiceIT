@@ -23,12 +23,19 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.isep.arqam.voiceit;
+package com.isep.arqam.voiceit.dropbox;
+
+import java.io.File;
+import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
+import android.net.ConnectivityManager;
 import android.os.Bundle;
+import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -41,16 +48,19 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
+import com.isep.arqam.voiceit.Act_memoRecord;
+import com.isep.arqam.voiceit.R;
+import com.isep.arqam.voiceit.Act_main;
 
 
 /**************************************************************************************************
- * MemoRecord
- * - Faz a grava��o de um novo memo
+ * Act_dropbox
  *************************************************************************************************/
-public class Settings extends Activity {
+public class Act_dropbox extends Activity {
 
 	/** Variaveis globais*/
-    private static final String TAG = "Settings";
+    private static final String TAG = "DropboxMain";
+
 
     ///////////////////////////////////////////////////////////////////////////
     //                      Your app-specific settings.                      //
@@ -82,13 +92,24 @@ public class Settings extends Activity {
     // Android widgets
     private Button mSubmit;
 
+    private final String FILE_DIR = "/Memos/";
+
 	/**********************************************************************************************
 	 * onCreate
 	 *********************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dropbox_main);
+        
+        /** Salta esta activity caso não haja ligação ha internet */
+        boolean isConnected = checkInternetConnection();
+        if (!isConnected){
+        	Intent disconnected = new Intent(Act_dropbox.this, Act_main.class);
+        	disconnected.putExtra("currentFrag", "1");
+			Act_dropbox.this.startActivity(disconnected);
+        }
+        
+        setContentView(R.layout.activity_act_dropbox);
 
         /** We create a new AuthSession so that we can use the Dropbox API.*/
         AndroidAuthSession session = buildSession();
@@ -103,18 +124,11 @@ public class Settings extends Activity {
                     logOut();
                 } else {
                     // Start the remote authentication
-                    mApi.getSession().startAuthentication(Settings.this);
+                    mApi.getSession().startAuthentication(Act_dropbox.this);
                 }
             }
         });
- 
-        
-        
-        
-        
-        
-        
-        
+
         /** Display the proper UI state if logged in or not*/
         setLoggedIn(mApi.getSession().isLinked());
     }
@@ -146,6 +160,75 @@ public class Settings extends Activity {
                 Log.i(TAG, "Error authenticating", e);
             }
         }
+        
+        /** Obtem os parametros extra passados para esta activity*/
+        Bundle extras = getIntent().getExtras();
+        
+        if(mApi.getSession().isLinked()){
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+            /** Verifica se existe algum memo no tlm que nao exista no Dropbox.
+             * 	Se for o caso ent�o guarda esse memo num array para fazer upload*/	
+        	/*
+        	for (String localMemoName : localMemoList) {
+        		existsInDropbox=false;
+        		String[] splitLocalMemoName = localMemoName.split("\\.");
+        		
+                for (String dropboxMemoName : dropboxMemoList) {	
+                	splitDropboxMemoName = dropboxMemoName.split("\\.");
+	        		
+					if(splitDropboxMemoName[0].equals(splitLocalMemoName[0]))
+						existsInDropbox=true;
+                }
+                if(!existsInDropbox){
+                	
+					String localMemoPath = Environment.getExternalStorageDirectory().getAbsolutePath();
+					localMemoPath += "/"+ localMemoName;
+                	memosToUpload.add(localMemoPath);
+                }
+			}
+        	*/
+        	
+        	
+        	
+        	
+        	
+        	
+        	
+	        /** Faz o download de ficheiros do dropbox*/
+	    	if(extras.getString("DropboxTask").equals("download")){
+	    		AsyncTask_down download = new AsyncTask_down(Act_dropbox.this, mApi, FILE_DIR);
+	    		download.execute();
+	    	}
+	    	/** Faz o upload de ficheiros para o dropbox*/
+	    	if(extras.getString("DropboxTask").equals("upload")){
+	    		String  memoName= extras.getString("memoName");
+    			File memoFile = new File(memoName);
+            	AsyncTask_up upload = new AsyncTask_up(Act_dropbox.this, mApi, FILE_DIR,
+            			memoFile,null,0);
+                upload.execute();
+	    	}
+	    	
+	    	/** Faz o upload de fixeiros para o dropbox*/
+	    	if(extras.getString("DropboxTask").equals("multiUpload")){
+	            ArrayList<String> memosToUpload = extras.getStringArrayList("memosToUpload");          
+	
+	        	//File memoFile = new File(memoName);
+            	AsyncTask_up upload = new AsyncTask_up(Act_dropbox.this, mApi, FILE_DIR,
+            			null,memosToUpload,0);	
+                upload.execute();
+	    	} 
+
+        }
+        
+        
+
+            
     }
 
 	/**********************************************************************************************
@@ -285,4 +368,16 @@ public class Settings extends Activity {
         
         return session;
     }
+    
+  //FUNÇÃO QUE TESTA A EXISTÊNCIA DE LIGAÇÃO HÁ INTERNET
+    private boolean checkInternetConnection() {
+    	ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+    	
+    	if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
+    		return true;
+    	} else {
+    		return false;
+    	}
+
+    } 
 }

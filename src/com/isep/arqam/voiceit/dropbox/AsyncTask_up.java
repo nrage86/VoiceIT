@@ -46,17 +46,16 @@ import com.dropbox.client2.exception.DropboxParseException;
 import com.dropbox.client2.exception.DropboxPartialFileException;
 import com.dropbox.client2.exception.DropboxServerException;
 import com.dropbox.client2.exception.DropboxUnlinkedException;
-import com.isep.arqam.voiceit.MemoArchive;
-import com.isep.arqam.voiceit.Voiceit_main;
+import com.isep.arqam.voiceit.Act_main;
 
 
 /**************************************************************************************************
- * UploadFile
+ * AsyncTask_up
  * - Here we show uploading a file in a background thread, trying to show
  *   typical exception handling and flow of control for an app that uploads a
  *   file from Dropbox.
  *************************************************************************************************/
-public class UploadFile extends AsyncTask<Void, Long, Boolean> {
+public class AsyncTask_up extends AsyncTask<Void, Long, Boolean> {
 
 	/** Variaveis globais*/
 	private DropboxAPI<?> mApi;
@@ -76,7 +75,7 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
 	/**********************************************************************************************
 	 * UploadFile
 	 *********************************************************************************************/
-	public UploadFile(Context context, DropboxAPI<?> api, String dropboxPath,
+	public AsyncTask_up(Context context, DropboxAPI<?> api, String dropboxPath,
             File file,ArrayList<String> memosToUpload,int memoIndex) {
 		
 		
@@ -125,7 +124,6 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
 				mFileLen = mFile.length();
 				index++;
 			}
-			//for (String memoName : memosToUploadList) {
 			
             // By creating a request, we get a handle to the putFile operation,
             // so we can cancel it later if we want to
@@ -215,7 +213,7 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
         //if (result && flag) {
         
         if(memosToUploadList!=null && index<memosToUploadList.size()){
-        	new UploadFile(mContext2,mApi,mPath,mFile,memosToUploadList,index).execute();
+        	new AsyncTask_up(mContext2,mApi,mPath,mFile,memosToUploadList,index).execute();
         }
         else
         	index=-1;
@@ -224,11 +222,11 @@ public class UploadFile extends AsyncTask<Void, Long, Boolean> {
             showToast("Ficheiro carregado com sucesso");
             
             /** Inicia a activity VoiceIT_MainActivity a partir desta Assyc Task(UploadFile)*/
-            Intent myIntent  = new Intent(mContext, Voiceit_main.class);
+            Intent myIntent  = new Intent(mContext, Act_main.class);
+            myIntent.putExtra("currentFrag", "1");
             myIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             myIntent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
-            mContext.startActivity(myIntent);
-           
+            mContext.startActivity(myIntent);          
         } else {
             showToast(mErrorMsg);
         }

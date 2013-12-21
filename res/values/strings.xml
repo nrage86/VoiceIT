@@ -17,9 +17,14 @@
     <string name="delete_context">Delete</string>
     <string name="play_str">Play</string>
     <string name="pause_str">Pause</string>
+    <string name="drop_down">Download</string>
+    <string name="drop_up">Upload</string>
+    <string name="menu_about">About</string>
 
     <color name="white">#fff</color>
+    <color name="black">#000</color>
     <color name="bg">#F2F2EA</color>
+    <color name="blue">#8bbbc9</color>
 
     <string name="title_activity_settings">Settings</string>
 

@@ -12,16 +12,14 @@ import android.view.Menu;
 import android.view.View;
 import android.widget.Button;
 
-import com.isep.arqam.voiceit.speechrecon.SpeechRecon;
+import com.isep.arqam.voiceit.speechrecon.Act_speechRecon;
 
 
 /**************************************************************************************************
- * MemoRecord
- * - Faz a grava��o de um novo memo
+ * Act_memoRecord
+ * - Faz a gravaco de um novo memo
  *************************************************************************************************/
-public class MemoRecord extends Activity {
-
-	/** Variaveis globais*/
+public class Act_memoRecord extends Activity {
 	private static final String TAG = "MemoRecord";
 	private MediaRecorder mRecorder = null;
     private static String mFileName = null;
@@ -32,11 +30,10 @@ public class MemoRecord extends Activity {
     @Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_memo_record);
+		setContentView(R.layout.activity_act_memo_record);
 		
 		Button btn_stopRecrod = (Button)findViewById(R.id.stopRecord);	
 		startRecording();
-
 		/**
 		 * Termina a gravaÁ„o e inicia activity Save_Temp. Esta activity È temporaria e
 		 * deve ser substituida por uma dialogbox nesta activity (RecordMemo) com os
@@ -46,9 +43,9 @@ public class MemoRecord extends Activity {
 			@Override
 			public void onClick(View arg0) {
 				stopRecording();
-				Intent myIntent = new Intent(MemoRecord.this, SpeechRecon.class);
+				Intent myIntent = new Intent(Act_memoRecord.this, Act_speechRecon.class);
 				myIntent.putExtra("memoNameDefault", mFileName);
-				MemoRecord.this.startActivity(myIntent);
+				Act_memoRecord.this.startActivity(myIntent);
 				finish();
 			}
 		});
@@ -102,8 +99,7 @@ public class MemoRecord extends Activity {
     /**********************************************************************************************
 	 * startRecording
 	 *********************************************************************************************/
-    public void startRecording() {
-    	
+    public void startRecording() { 	
     	Long numLong = System.currentTimeMillis()/1000;
     	String num = numLong.toString();
     	mRecorder = new MediaRecorder();
@@ -113,7 +109,6 @@ public class MemoRecord extends Activity {
         mFileName = Environment.getExternalStorageDirectory().getAbsolutePath();
         mFileName += "/VoiceIT"+num+".3gp";
         mRecorder.setOutputFile(mFileName);
-
         
         try {
         	mRecorder.prepare();
