@@ -2,6 +2,10 @@ package com.isep.arqam.voiceit;
 
 import java.io.File;
 import java.util.ArrayList;
+
+import com.isep.arqam.voiceit.dropbox.Act_dropbox;
+
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
@@ -9,15 +13,22 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+
+/**************************************************************************************************
+ * Frag_memoArchive
+ *************************************************************************************************/
 public class Frag_memoArchive extends ListFragment {
 	private static final String TAG = "Fragment1";
 	private ArrayList<String> filePath = new ArrayList<String>();
@@ -26,6 +37,7 @@ public class Frag_memoArchive extends ListFragment {
 	private File[] sdcardFiles = sdcard.listFiles();
 	private ArrayAdapter<Memo> adapter = null;
 	private FragmentActivity fa;
+	private RelativeLayout rl;
 	
 	/**********************************************************************************************
 	 * onActivityCreated
@@ -36,10 +48,27 @@ public class Frag_memoArchive extends ListFragment {
 		
 		fa = super.getActivity();		
 		getLocalMemoList();	
+		ListView list = getListView();		
+		View header = ((LayoutInflater) fa.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).
+				inflate(R.layout.frag_memo_archive, null, false);
+		
 		adapter = new ArrayAdapter<Memo>(fa,
 				android.R.layout.simple_list_item_1, localMemoList);
+		
+		list.addHeaderView(header);
 		setListAdapter(adapter);
-		registerForContextMenu(getListView());
+		registerForContextMenu(list);
+		
+		Button btn_download = (Button)header.findViewById(R.id.download);
+		btn_download.setOnClickListener(new View.OnClickListener() {		
+			@Override
+			public void onClick(View arg0) {	
+				Intent myIntent = new Intent(fa,Act_dropbox.class);
+		        myIntent.putExtra("DropboxTask", "download");
+		        startActivityForResult(myIntent, 0);;
+			}
+		});
+		 
 	}
 
 	/**********************************************************************************************
@@ -49,7 +78,7 @@ public class Frag_memoArchive extends ListFragment {
 	public void onCreateContextMenu(ContextMenu menu, View v, ContextMenuInfo menuInfo) {
 		  super.onCreateContextMenu(menu, v, menuInfo);
 		  MenuInflater inflater = fa.getMenuInflater();
-		  inflater.inflate(R.menu.activity_memos_archive, menu);
+		  inflater.inflate(R.menu.frag_memos_archive, menu);
 	}
 	
 	/**********************************************************************************************
@@ -75,7 +104,7 @@ public class Frag_memoArchive extends ListFragment {
 		  		
 		      	if (del){
 		      		getLocalMemoList();
-		      		Intent myIntent2 = new Intent(fa,Voiceit_main.class);
+		      		Intent myIntent2 = new Intent(fa,Act_main.class);
 			        myIntent2.putExtra("currentFrag", "1");
 			        myIntent2.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 		            myIntent2.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP );
@@ -100,7 +129,7 @@ public class Frag_memoArchive extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 	    // Do something with the data	
 		Toast.makeText(fa, "Clicked ",Toast.LENGTH_SHORT).show();
-		Intent myIntent = new Intent(fa, MemoPlay.class);
+		Intent myIntent = new Intent(fa, Act_memoPlay.class);
         Memo selectedFile = (Memo) this.getListAdapter().getItem(position);
         String sfPath = selectedFile.getFilePath();
         Log.i("selectedFile", sfPath);

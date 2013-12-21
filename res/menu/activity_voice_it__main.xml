@@ -1,21 +1,15 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android" >
 
+    <item 
+        android:id="@+id/about" 
+        android:title="About" 
+        android:onClick="@string/menu_about">    
+    </item>
+    
     <item
-        android:id="@+id/menu_settings"
+        android:id="@+id/settings"
         android:orderInCategory="100"
         android:showAsAction="never"
         android:title="@string/menu_settings">
     </item>
-    <item 
-        android:id="@+id/archive" 
-        android:title="Archive" 
-        android:onClick="@string/title_activity_memos_archive">
-    </item>
-    <!--
-    <item 
-        android:id="@+id/About" 
-        android:title="About" 
-        android:onClick="@string/title_activity_About">    
-    </item>
-	-->
 </menu>

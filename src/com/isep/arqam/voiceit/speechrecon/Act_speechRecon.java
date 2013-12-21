@@ -19,142 +19,148 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.isep.arqam.voiceit.R;
-import com.isep.arqam.voiceit.Voiceit_main;
-import com.isep.arqam.voiceit.dropbox.DropboxMain;
+import com.isep.arqam.voiceit.Act_main;
+import com.isep.arqam.voiceit.dropbox.Act_dropbox;
 
-public class SpeechRecon extends Activity{
-
-	ListView lv; //listView
+/**************************************************************************************************
+ * Act_speechRecon
+ *************************************************************************************************/
+public class Act_speechRecon extends Activity{
+	//listView
+	ListView lv; 
 	static final int check = 1111;
-	String defaultName = null; //variável que armazena o nome por defeito recebido da activity anterior (MemoRecord)
-	String newName = null; //vari��vel que armazena o novo nome dado pelo utilizador
+	//variavel que armazena o nome por defeito recebido da activity anterior (MemoRecord)
+	String defaultName = null;
+	//variavel que armazena o novo nome dado pelo utilizador
+	String newName = null; 
 	
+	/**********************************************************************************************
+	 * onCreate
+	 *********************************************************************************************/
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_speech_recon);
+        setContentView(R.layout.activity_act_speech_recon);
         
-        lv = (ListView)findViewById(R.id.wordsLv);
-		
+        lv = (ListView)findViewById(R.id.wordsLv);	
         //BOTAO PARA DITAR NOME DO MEMO
         Button b = (Button)findViewById(R.id.speakBt);
 		b.setOnClickListener(new View.OnClickListener() {
 			@Override
-			public void onClick(View v) {
-				
+			public void onClick(View v) {	
 				//Verifica o estado da ligação à internet
 				boolean isConnected = checkInternetConnection();
 				
-				if(isConnected==true){ //executa o reconhecimento de fala para dar o nome ao título
+				//executa o reconhecimento de fala para dar o nome ao título
+				if(isConnected==true){ 
 					Intent i = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-					i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL, RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+					i.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+							RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
 					i.putExtra(RecognizerIntent.EXTRA_PROMPT, "Dite o nome...");
 					startActivityForResult(i, check);
-					finish();
+					//finish();
 				}else{ //deixa o ficheiro com o nome por defeito e salta para a Main Activity
-					Intent i = new Intent(SpeechRecon.this, Voiceit_main.class);
-					
+					Intent i = new Intent(Act_speechRecon.this, Act_main.class);
 					//TOAST - nome por defeito
 					Context context = getApplicationContext();
 					CharSequence text = "O memo foi gravado com um nome incremental";
 					int duration = Toast.LENGTH_SHORT;
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
-					
 					//Voltar à activity principal
-					SpeechRecon.this.startActivity(i);
-					finish();
+					Act_speechRecon.this.startActivity(i);
+					//finish();
 				}
 			}
 		});
 		
-		//BOT��O QUE SALTA A OP����O DE DITAR NOME
+		//BOTAO QUE SALTA A OPCAO DE DITAR NOME
 		Button bDefault = (Button)findViewById(R.id.defaultBt);
 		bDefault.setOnClickListener(new View.OnClickListener() {
 			@Override
 			public void onClick(View v) {
-				
 				//Verifica o estado da ligação à internet
 				boolean isConnected = checkInternetConnection();
 				
-				if(isConnected==true){ //executa a activity de sincronização com Dropbox
-					Intent myIntent = new Intent(SpeechRecon.this, DropboxMain.class);
-					newName = getIntent().getStringExtra("memoNameDefault"); //neste contexto a vari��vel newName assume o nome por defeito
-					myIntent.putExtra("memoName", newName); //envia o caminho do ficheiro para a activity DropboxTest
+				//executa a activity de sincronização com Dropbox
+				if(isConnected==true){ 
+					Intent myIntent = new Intent(Act_speechRecon.this, Act_dropbox.class);
+					//neste contexto a vari��vel newName assume o nome por defeito
+					newName = getIntent().getStringExtra("memoNameDefault");
+					//envia o caminho do ficheiro para a activity DropboxTest
+					myIntent.putExtra("memoName", newName); 
 					myIntent.putExtra("DropboxTask", "upload");
-					SpeechRecon.this.startActivity(myIntent); //inicia a activity DropboxMain
+					//inicia a activity DropboxMain
+					Act_speechRecon.this.startActivity(myIntent); 
 					finish();
 				}else{ //salta para a Main Activity
-					Intent i = new Intent(SpeechRecon.this, Voiceit_main.class);
-					
+					Intent i = new Intent(Act_speechRecon.this, Act_main.class);	
 					//TOAST - nome por defeito
 					Context context = getApplicationContext();
 					CharSequence text = "O memo foi gravado com um nome incremental";
 					int duration = Toast.LENGTH_SHORT;
 					Toast toast = Toast.makeText(context, text, duration);
 					toast.show();
-					
 					//Voltar à activity principal
-					SpeechRecon.this.startActivity(i);
+					Act_speechRecon.this.startActivity(i);
 					finish();
 				}
-				
-				
-				
-				
-
 			}
 		});
     }
     
-    
-    //Lida com os resultados do reconhecimento de voz	 
+	/**********************************************************************************************
+	 * onActivityResult
+	 * - Lida com os resultados do reconhecimento de voz	
+	 *********************************************************************************************/
     @Override
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		// TODO Auto-generated method stub
+    	
 		if (requestCode == check && resultCode == RESULT_OK){
-			ArrayList<String> results = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-			
+			ArrayList<String> results = 
+					data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
 			//preencher lista com elementos do array de resultados
-			lv.setAdapter(new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, results));
-			
+			lv.setAdapter(new ArrayAdapter<String>(this,
+					android.R.layout.simple_list_item_1, results));
 			//comportamento ao clicar num item da lista lv
 			lv.setOnItemClickListener(new OnItemClickListener(){
 				public void onItemClick(AdapterView<?> a, View v, int position, long id){
-					Intent myIntent = new Intent(SpeechRecon.this, DropboxMain.class);
-					
-					//caminho do ficheiro antes de o utilizador ter ditado o nome, recebido da activity MemoRecord
+					Intent myIntent = new Intent(Act_speechRecon.this, Act_dropbox.class);
+					//caminho do ficheiro antes de o utilizador ter ditado o nome,
+					// recebido da activity MemoRecord
 					defaultName = getIntent().getStringExtra("memoNameDefault");
-					
 					//nome ditado pelo utilizador
 					newName = Environment.getExternalStorageDirectory().getAbsolutePath();
-					newName += "/"+lv.getItemAtPosition(position).toString()+".3gp";					
-					
+					newName += "/"+lv.getItemAtPosition(position).toString()+".3gp";
 					//mudan��a de nome do ficheiro
 					File file1 = new File(defaultName);
 					File file2 = new File(newName);		
 					file1.renameTo(file2);
-					
-					myIntent.putExtra("memoName", newName); //envia o caminho do ficheiro para a activity DropboxTest
+					 //envia o caminho do ficheiro para a activity DropboxTest
+					myIntent.putExtra("memoName", newName);
 					myIntent.putExtra("DropboxTask", "upload");
-					SpeechRecon.this.startActivity(myIntent); //inicia a activity DropboxTest
+					//inicia a activity DropboxTest
+					Act_speechRecon.this.startActivity(myIntent); 
 				}
 			});
 		}
-		
 		super.onActivityResult(requestCode, resultCode, data);
 	}
     
-    
+	/**********************************************************************************************
+	 * checkInternetConnection
+	 *********************************************************************************************/
     //FUNÇÃO QUE TESTA A EXISTÊNCIA DE LIGAÇÃO HÁ INTERNET
     private boolean checkInternetConnection() {
-    	ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
+    	ConnectivityManager conMgr = 
+    			(ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
     	
-    	if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
+    	if (conMgr.getActiveNetworkInfo() != null &&
+    			conMgr.getActiveNetworkInfo().isAvailable() &&
+    			conMgr.getActiveNetworkInfo().isConnected()) {
     		return true;
     	} else {
     		return false;
     	}
-
     } 
 }

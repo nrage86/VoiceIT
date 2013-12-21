@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout 
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent" 
+    android:layout_height="wrap_content"
+    android:background="@color/bg">
+
+    <Button
+        style="@style/ButtonTheme"
+        android:background="@drawable/dp_down"
+        android:id="@+id/download" 
+	    android:layout_width="150dp"
+	    android:layout_height="60dp"
+        android:layout_alignParentTop="true" 
+        android:layout_alignParentLeft="true"
+	    android:text="@string/drop_down"
+	    android:textColor="@color/white"
+	    android:textSize="18sp" />
+    
+	<Button
+        style="@style/ButtonTheme"
+        android:background="@drawable/dp_up"
+        android:id="@+id/upload" 
+	    android:layout_width="150dp"
+	    android:layout_height="60dp"
+        android:layout_alignParentTop="true" 
+        android:layout_alignParentRight="true"
+	    android:text="@string/drop_up"
+	    android:textColor="@color/white"
+	    android:textSize="18sp" />
+
+</RelativeLayout>

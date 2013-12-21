@@ -8,110 +8,91 @@
 package com.isep.arqam.voiceit;
 
 public final class R {
-    public static final class array {
-        public static final int pref_example_list_titles=0x7f070000;
-        public static final int pref_example_list_values=0x7f070001;
-        public static final int pref_sync_frequency_titles=0x7f070002;
-        public static final int pref_sync_frequency_values=0x7f070003;
-    }
     public static final class attr {
     }
     public static final class color {
-        public static final int bg=0x7f060001;
-        public static final int white=0x7f060000;
+        public static final int bg=0x7f050002;
+        public static final int black=0x7f050001;
+        public static final int blue=0x7f050003;
+        public static final int white=0x7f050000;
     }
     public static final class drawable {
         public static final int bg_splashscreen_2011=0x7f020000;
         public static final int bg_top_members=0x7f020001;
         public static final int bg_yellow_red_pixelated=0x7f020002;
-        public static final int ic_action_search=0x7f020003;
-        public static final int ic_launcher=0x7f020004;
-        public static final int logo=0x7f020005;
-        public static final int mainlogo_big=0x7f020006;
-        public static final int menu_main=0x7f020007;
-        public static final int recbutton=0x7f020008;
-        public static final int ukon=0x7f020009;
+        public static final int dp_down=0x7f020003;
+        public static final int dp_up=0x7f020004;
+        public static final int ic_action_search=0x7f020005;
+        public static final int ic_launcher=0x7f020006;
+        public static final int logo=0x7f020007;
+        public static final int mainlogo_big=0x7f020008;
+        public static final int menu_main=0x7f020009;
+        public static final int recbutton=0x7f02000a;
+        public static final int simple_button=0x7f02000b;
+        public static final int ukon=0x7f02000c;
     }
     public static final class id {
-        public static final int MemoList=0x7f0a0006;
-        public static final int archive=0x7f0a0011;
-        public static final int auth_button=0x7f0a0000;
-        public static final int btnPlay=0x7f0a0001;
-        public static final int btnUnlinkDropbox=0x7f0a0007;
-        public static final int defaultBt=0x7f0a000a;
-        public static final int delete=0x7f0a0010;
-        public static final int imageView1=0x7f0a000b;
-        public static final int imageView2=0x7f0a000c;
-        public static final int menu_settings=0x7f0a000e;
-        public static final int play=0x7f0a000f;
-        public static final int seekbar=0x7f0a0002;
-        public static final int songCurrentDurationLabel=0x7f0a0003;
-        public static final int songTotalDurationLabel=0x7f0a0004;
-        public static final int speakBt=0x7f0a0008;
-        public static final int startRecord=0x7f0a000d;
-        public static final int stopRecord=0x7f0a0005;
+        public static final int about=0x7f080010;
+        public static final int auth_button=0x7f080000;
+        public static final int btnPlay=0x7f080001;
+        public static final int defaultBt=0x7f080008;
+        public static final int delete=0x7f080013;
+        public static final int download=0x7f080009;
+        public static final int imageView1=0x7f08000d;
+        public static final int logo=0x7f08000b;
+        public static final int menu_main=0x7f08000e;
+        public static final int menu_settings=0x7f08000f;
+        public static final int play=0x7f080012;
+        public static final int seekbar=0x7f080002;
+        public static final int settings=0x7f080011;
+        public static final int songCurrentDurationLabel=0x7f080003;
+        public static final int songTotalDurationLabel=0x7f080004;
+        public static final int speakBt=0x7f080006;
+        public static final int startRecord=0x7f08000c;
+        public static final int stopRecord=0x7f080005;
+        public static final int upload=0x7f08000a;
         public static final int viewpager=0x01010000;
-        public static final int wordsLv=0x7f0a0009;
+        public static final int wordsLv=0x7f080007;
     }
     public static final class layout {
-        public static final int activity_dropbox_main=0x7f030000;
-        public static final int activity_memo_play=0x7f030001;
-        public static final int activity_memo_record=0x7f030002;
-        public static final int activity_memos_archive=0x7f030003;
-        public static final int activity_settings=0x7f030004;
-        public static final int activity_speech_recon=0x7f030005;
-        public static final int activity_voice_it__main=0x7f030006;
-        public static final int fragment0_layout=0x7f030007;
-        public static final int fragment1_layout=0x7f030008;
+        public static final int activity_act_dropbox=0x7f030000;
+        public static final int activity_act_main=0x7f030001;
+        public static final int activity_act_memo_play=0x7f030002;
+        public static final int activity_act_memo_record=0x7f030003;
+        public static final int activity_act_settings=0x7f030004;
+        public static final int activity_act_speech_recon=0x7f030005;
+        public static final int frag_memo_archive=0x7f030006;
+        public static final int frag_start_screen=0x7f030007;
     }
     public static final class menu {
-        public static final int activity_memo_play=0x7f090000;
-        public static final int activity_memos_archive=0x7f090001;
-        public static final int activity_record_memo=0x7f090002;
-        public static final int activity_save__temp=0x7f090003;
-        public static final int activity_settings=0x7f090004;
-        public static final int activity_voice_it__main=0x7f090005;
+        public static final int activity_memo_play=0x7f070000;
+        public static final int activity_record_memo=0x7f070001;
+        public static final int activity_save__temp=0x7f070002;
+        public static final int activity_settings=0x7f070003;
+        public static final int activity_voice_it__main=0x7f070004;
+        public static final int frag_memos_archive=0x7f070005;
     }
     public static final class string {
-        public static final int app_name=0x7f050000;
-        public static final int defaultName=0x7f05000b;
-        public static final int delete_context=0x7f05000d;
-        public static final int hello_world=0x7f050001;
-        public static final int listenName=0x7f05000a;
-        public static final int menu_settings=0x7f050002;
-        public static final int pause_str=0x7f05000f;
-        public static final int play_context=0x7f05000c;
-        public static final int play_str=0x7f05000e;
-        public static final int pref_default_display_name=0x7f050016;
-        public static final int pref_description_social_recommendations=0x7f050014;
-        /**  Example settings for Data & Sync 
-         */
-        public static final int pref_header_data_sync=0x7f050018;
-        /**  Strings related to Settings 
- Example General settings 
-         */
-        public static final int pref_header_general=0x7f050012;
-        /**  Example settings for Notifications 
-         */
-        public static final int pref_header_notifications=0x7f05001b;
-        public static final int pref_ringtone_silent=0x7f05001e;
-        public static final int pref_title_add_friends_to_messages=0x7f050017;
-        public static final int pref_title_display_name=0x7f050015;
-        public static final int pref_title_new_message_notifications=0x7f05001c;
-        public static final int pref_title_ringtone=0x7f05001d;
-        public static final int pref_title_social_recommendations=0x7f050013;
-        public static final int pref_title_sync_frequency=0x7f050019;
-        public static final int pref_title_system_sync_settings=0x7f05001a;
-        public static final int pref_title_vibrate=0x7f05001f;
-        public static final int title_activity_drop_dox_test=0x7f050006;
-        public static final int title_activity_memo_play=0x7f050007;
-        public static final int title_activity_memo_record=0x7f050003;
-        public static final int title_activity_memos_archive=0x7f050004;
-        public static final int title_activity_save__temp=0x7f050005;
-        public static final int title_activity_settings=0x7f050010;
-        public static final int title_activity_speech_recon=0x7f050009;
-        public static final int title_activity_voice_it__settings=0x7f050011;
-        public static final int title_activity_voice_recon=0x7f050008;
+        public static final int app_name=0x7f040000;
+        public static final int defaultName=0x7f04000b;
+        public static final int delete_context=0x7f04000d;
+        public static final int drop_down=0x7f040010;
+        public static final int drop_up=0x7f040011;
+        public static final int hello_world=0x7f040001;
+        public static final int listenName=0x7f04000a;
+        public static final int menu_about=0x7f040012;
+        public static final int menu_settings=0x7f040002;
+        public static final int pause_str=0x7f04000f;
+        public static final int play_context=0x7f04000c;
+        public static final int play_str=0x7f04000e;
+        public static final int title_activity_drop_dox_test=0x7f040006;
+        public static final int title_activity_memo_play=0x7f040007;
+        public static final int title_activity_memo_record=0x7f040003;
+        public static final int title_activity_memos_archive=0x7f040004;
+        public static final int title_activity_save__temp=0x7f040005;
+        public static final int title_activity_settings=0x7f040013;
+        public static final int title_activity_speech_recon=0x7f040009;
+        public static final int title_activity_voice_recon=0x7f040008;
     }
     public static final class style {
         /** 
@@ -135,16 +116,10 @@ public final class R {
     
  API 14 theme customizations can go here. 
          */
-        public static final int AppBaseTheme=0x7f080000;
+        public static final int AppBaseTheme=0x7f060000;
         /**  Application theme. 
          */
-        public static final int AppTheme=0x7f080001;
-        public static final int ButtonTheme=0x7f080002;
-    }
-    public static final class xml {
-        public static final int pref_data_sync=0x7f040000;
-        public static final int pref_general=0x7f040001;
-        public static final int pref_headers=0x7f040002;
-        public static final int pref_notification=0x7f040003;
+        public static final int AppTheme=0x7f060001;
+        public static final int ButtonTheme=0x7f060002;
     }
 }

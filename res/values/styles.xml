@@ -17,15 +17,14 @@
     <style name="AppTheme" parent="AppBaseTheme">
         <!-- All customizations that are NOT specific to a particular API-level can go here. -->
         <!--<item name="android:background">@color/gray</item>-->
-        <item name="android:textColor">#e35e35</item>
-        <item name="android:background">@color/bg</item>
+        <item name="android:textColor">#000</item>
         
     </style>
     
     <style name="ButtonTheme">
-        
-        <item name="android:textColor">#e35e35</item>
-        <item name="android:textSize">20sp</item>
+        <item name="android:background">#ff3333</item>
+        <item name="android:textColor">#fff</item>
+        <item name="android:textSize">18sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textIsSelectable">false</item>
     </style>

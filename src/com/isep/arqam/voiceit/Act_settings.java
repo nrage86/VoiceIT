@@ -23,17 +23,11 @@
  * OTHER DEALINGS IN THE SOFTWARE.
  */
 
-package com.isep.arqam.voiceit.dropbox;
-
-import java.io.File;
-import java.util.ArrayList;
+package com.isep.arqam.voiceit;
 
 import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;
-import android.net.ConnectivityManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -47,20 +41,13 @@ import com.dropbox.client2.session.AccessTokenPair;
 import com.dropbox.client2.session.AppKeyPair;
 import com.dropbox.client2.session.Session.AccessType;
 import com.dropbox.client2.session.TokenPair;
-import com.isep.arqam.voiceit.MemoArchive;
-import com.isep.arqam.voiceit.MemoRecord;
-import com.isep.arqam.voiceit.R;
-import com.isep.arqam.voiceit.Voiceit_main;
 
 
 /**************************************************************************************************
- * MemoRecord
- * - Faz a grava��o de um novo memo
+ * Act_settings
  *************************************************************************************************/
-public class DropboxMain extends Activity {
-
-	/** Variaveis globais*/
-    private static final String TAG = "DropboxMain";
+public class Act_settings extends Activity {
+    private static final String TAG = "Settings";
 
     ///////////////////////////////////////////////////////////////////////////
     //                      Your app-specific settings.                      //
@@ -92,23 +79,13 @@ public class DropboxMain extends Activity {
     // Android widgets
     private Button mSubmit;
 
-    private final String FILE_DIR = "/Memos/";
-
 	/**********************************************************************************************
 	 * onCreate
 	 *********************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
-        /** Salta esta activity caso não haja ligação ha internet */
-        boolean isConnected = checkInternetConnection();
-        if (!isConnected){
-        	Intent disconnected = new Intent(DropboxMain.this, MemoArchive.class);
-			DropboxMain.this.startActivity(disconnected);
-        }
-        
-        setContentView(R.layout.activity_dropbox_main);
+        setContentView(R.layout.activity_act_settings);
 
         /** We create a new AuthSession so that we can use the Dropbox API.*/
         AndroidAuthSession session = buildSession();
@@ -123,7 +100,7 @@ public class DropboxMain extends Activity {
                     logOut();
                 } else {
                     // Start the remote authentication
-                    mApi.getSession().startAuthentication(DropboxMain.this);
+                    mApi.getSession().startAuthentication(Act_settings.this);
                 }
             }
         });
@@ -159,41 +136,6 @@ public class DropboxMain extends Activity {
                 Log.i(TAG, "Error authenticating", e);
             }
         }
-        
-        /** Obtem os parametros extra passados para esta activity*/
-        Bundle extras = getIntent().getExtras();
-        
-        if(mApi.getSession().isLinked()){
-        	
-	        /** Faz o download de ficheiros do dropbox*/
-	    	if(extras.getString("DropboxTask").equals("download")){
-	    		DownloadFile download = new DownloadFile(DropboxMain.this, mApi, FILE_DIR);
-	    		download.execute();
-	    	}
-	    	/** Faz o upload de ficheiros para o dropbox*/
-	    	if(extras.getString("DropboxTask").equals("upload")){
-	    		String  memoName= extras.getString("memoName");
-    			File memoFile = new File(memoName);
-            	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR,
-            			memoFile,null,0);
-                upload.execute();
-	    	}
-	    	
-	    	/** Faz o upload de fixeiros para o dropbox*/
-	    	if(extras.getString("DropboxTask").equals("multiUpload")){
-	            ArrayList<String> memosToUpload = extras.getStringArrayList("memosToUpload");          
-	
-	        	//File memoFile = new File(memoName);
-            	UploadFile upload = new UploadFile(DropboxMain.this, mApi, FILE_DIR,
-            			null,memosToUpload,0);	
-                upload.execute();
-	    	} 
-
-        }
-        
-        
-
-            
     }
 
 	/**********************************************************************************************
@@ -238,10 +180,8 @@ public class DropboxMain extends Activity {
     private void logOut() {
         // Remove credentials from the session
         mApi.getSession().unlink();
-        
         // Clear our stored keys
-        clearKeys();
-        
+        clearKeys();  
         // Change UI state to display logged out version
         setLoggedIn(false);
     }
@@ -258,7 +198,6 @@ public class DropboxMain extends Activity {
     		mSubmit.setText("Link with Dropbox");
     	}
     }
-
 
 	/**********************************************************************************************
 	 * showToast
@@ -333,16 +272,4 @@ public class DropboxMain extends Activity {
         
         return session;
     }
-    
-  //FUNÇÃO QUE TESTA A EXISTÊNCIA DE LIGAÇÃO HÁ INTERNET
-    private boolean checkInternetConnection() {
-    	ConnectivityManager conMgr = (ConnectivityManager) getSystemService (Context.CONNECTIVITY_SERVICE);
-    	
-    	if (conMgr.getActiveNetworkInfo() != null && conMgr.getActiveNetworkInfo().isAvailable() && conMgr.getActiveNetworkInfo().isConnected()) {
-    		return true;
-    	} else {
-    		return false;
-    	}
-
-    } 
 }
